@@ -48,5 +48,5 @@ alias ls="ls -AF --color=auto" \
     gits="git status" \
     gitc="git commit" \
     gitp="git push" \
-    hacker="cmatrix" \
+    hacker="cmatrix -a -u 3" \
     config="git --git-dir=$HOME/Desktop/coding-stuff/github/matthew55/dotfiles/ --work-tree=$HOME" \

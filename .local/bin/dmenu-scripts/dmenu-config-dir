@@ -1,4 +1,4 @@
-#!/usr/bin/env bash
+#!/usr/bin/bash
 # Opens a directory or file in the ~/.config directory.
 # Assumes TERMINAL and EDITOR are defined.
 

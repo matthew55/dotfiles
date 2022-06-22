@@ -1,4 +1,4 @@
-#!/usr/bin/env bash
+#!/usr/bin/bash
 # Searches the Arch Wiki for articles and opens them in a browser.
 # Date created: June 4, 2022
 # Arch Docs: /usr/share/doc/arch-wiki/html/en/

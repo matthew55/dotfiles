@@ -171,3 +171,13 @@ set nowritebackup
 set noswapfile     
 
 "------------------------------------------------------------
+" Plugins {{{1
+call plug#begin('~/.vim/plugged/')
+
+Plug 'ap/vim-css-color'
+Plug 'tpope/vim-surround'
+Plug 'scrooloose/syntastic'
+Plug 'elzr/vim-json'
+
+call plug#end()
+"------------------------------------------------------------

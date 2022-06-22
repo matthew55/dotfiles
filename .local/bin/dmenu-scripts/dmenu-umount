@@ -1,4 +1,4 @@
-#!/usr/bin/env bash
+#!/usr/bin/bash
 
 # A dmenu prompt to unmount drives.
 # Provides you with mounted partitions, select one to unmount.
