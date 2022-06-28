@@ -14,20 +14,19 @@ defaultwallpaper="$HOME/.local/bin/defaultwallpaper.sh"
 [ -f $defaultwallpaper ] || echo xwallpaper >> ~/.local/bin/defaultwallpaper.sh && chmod +x ~/.local/bin/defaultwallpaper.sh
 
 Monitors=$(xrandr --listactivemonitors)
-ActiveMonitors=$(echo $Monitors | grep "+" | awk '{print $4}')
-Monitor1=$(echo "$ActiveMonitors" | awk NR==1) # Select the first monitor for dual mode
-[ ! -z $Monitor1 ] && Resolution1=$(echo "$ActiveMonitors" | grep $Monitor1 | sed 's/[\/x]/ /g' | awk '{print $3 "x" $5}')
-Monitor2=$(echo "$ActiveMonitors" | awk NR==2) # Select the second monitor for dual mode
-[ ! -z $Monitor2 ] && Resolution2=$(echo "$ActiveMonitors" | grep $Monitor2 | sed 's/[\/x]/ /g' | awk '{print $3 "x" $5}')
-Monitor3=$(echo "$ActiveMonitors" | awk NR==3) # Select the third monitor for triple mode
-[ ! -z $Monitor3 ] && Resolution3=$(echo "$ActiveMonitors" | grep $Monitor3 | sed 's/[\/x]/ /g' | awk '{print $3 "x" $5}')
+MonitorLines=$(echo "$Monitors" | grep "+")
+ActiveMonitors=$(echo "${MonitorLines##* }")
+Monitor1=$(echo "$ActiveMonitors" | sed -n 1p) # Select the first monitor for dual mode
+[ ! -z $Monitor1 ] && var="$(echo "$MonitorLines" | grep $Monitor1 | grep -Po "\d+(?=/)" | tr "\n" "x")" && Resolution1=${var::-1}
+Monitor2=$(echo "$ActiveMonitors" | sed -n 2p) # Select the second monitor for dual mode
+[ ! -z $Monitor2 ] && var="$(echo "$MonitorLines" | grep $Monitor2 | grep -Po "\d+(?=/)" | tr "\n" "x")" && Resolution2=${var::-1}
+Monitor3=$(echo "$ActiveMonitors" | sed -n 3p) # Select the third monitor for triple mode
+[ ! -z $Monitor3 ] && var="$(echo "$MonitorLines" | grep $Monitor3 | grep -Po "\d+(?=/)" | tr "\n" "x")" && Resolution2=${var::-1}
 # get number of avilable active monitors
 NumOfMonitors=$(echo "$Monitors" | grep "+" | wc -l)
-echo $NumOfMonitors
 # get screen resulotion to calculate the center
-Xrandr=$(xrandr | grep "*" | sed 's/x/ /g')
-x=$(echo $Xrandr | awk -F " " '{print $1}' | sed 's/\ //g')
-y=$(echo $Xrandr | awk -F " " '{print $2}' | sed 's/\ //g')
+x=$(echo "${Resolution1%%x*}")
+y=$(echo "${Resolution1##*x}")
 xl=$(echo "($x-1000)/2" | bc)
 yl=$(echo "($y-750)/2" | bc)
 location=$(echo 1000x750+$xl+$yl)
@@ -74,7 +73,7 @@ usage() {
     echo ""
 }
 
-while getopts :d:rhpbnlfR option; do
+while getopts :d:rhpbnolfR option; do
     case "${option}" in
         d) DIR=${OPTARG};;
         r) restore && exit;;
@@ -111,6 +110,7 @@ Single(){
     # if no picture is marked in sxiv, exit.
     [ -z "$walls" ] && exit 0
 
+    echo "$ShowOptions"
     if [ "$ShowOptions" = "True" ];
     then
         if [ "$UseRofi" = "True" ] && [ "$UseFeh" = "True" ];
@@ -151,7 +151,8 @@ Single(){
 				fi
     fi
 
-    [ "$WithPywall" = "True" ] && wal -i $wall1 -n
+    [ "$WithPywall" = "True" ] && wal -i $wall1 -n && xsetroot -name "fsignal:1"
+
 
     if [ "$WithBetterlockscreen" = "True" ]; then
         dunstify "Wall-d" "$startMessage"
@@ -200,7 +201,8 @@ Dual() {
 						xwallpaper --output $Monitor1 --$WallOptions $dwall1 --output $Monitor2 --$WallOptions $dwall2 && sed -i "s|xwallpaper.*|xwallpaper --output $Monitor1 --$WallOptions $dwall1 --output $Monitor2 --$WallOptions $dwall2|" $HOME/.local/bin/defaultwallpaper.sh
 		fi
 
-    [ "$WithPywall" = "True" ] && wal -i $dwall1 -n
+    [ "$WithPywall" = "True" ] && wal -i $dwall1 -n && xsetroot -name "fsignal:1"
+
 
     if [ "$WithBetterlockscreen" = "True" ]; then
         dunstify "Wall-d" "$startMessage"
@@ -250,7 +252,8 @@ Triple() {
 						xwallpaper --output $Monitor1 --$WallOptions $twall1 --output $Monitor2 --$WallOptions $twall2 --output $Monitor3 --$WallOptions $twall3 && sed -i "s|xwallpaper.*|xwallpaper --output $Monitor1 --$WallOptions $twall1 --output $Monitor2 --$WallOptions $twall2 --output $Monitor3 --$WallOptions $twall3 |" $HOME/.local/bin/defaultwallpaper.sh
 		fi
 
-    [ "$WithPywall" = "True" ] && wal -i $twall2 -n
+    [ "$WithPywall" = "True" ] && wal -i $twall2 -n && xsetroot -name "fsignal:1"
+
 
     if [ "$WithBetterlockscreen" = "True" ]; then
         dunstify "Wall-d" "$startMessage"

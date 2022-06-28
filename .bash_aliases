@@ -50,3 +50,4 @@ alias ls="ls -AF --color=auto" \
     gitp="git push" \
     hacker="cmatrix -a -u 3" \
     config="git --git-dir=$HOME/Desktop/coding-stuff/github/matthew55/dotfiles/ --work-tree=$HOME" \
+    ascii="figlet" \
