@@ -132,9 +132,9 @@ Single(){
     else
         if [ "$UseFeh" = "True" ];
         then
-            WallOptions="fill"
+            WallOptions="scale"
         else
-            WallOptions="zoom"
+            WallOptions="stretch"
         fi
     fi
 
