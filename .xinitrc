@@ -9,8 +9,8 @@ wal -R &
 # Start URxvt dameon for ram useage improvements.
 # urxvtd -q -o -f &
 
-# Get numpad working.
-numlockx &
+ Get numpad working.
+#numlockx &
 
 # Get clipboard working
 xclip &
@@ -19,5 +19,5 @@ xclip &
 [[ -f ~/.Xresources ]] && xrdb -merge -I$HOME ~/.Xresources && xrdb -merge ~/.cache/wal/colors.Xresources
 
 # Start our display manager
-dwmblocks &
+#dwmblocks &
 exec dwm

@@ -159,6 +159,10 @@ map Y y$
 " next search
 nnoremap <C-L> :nohl<CR><C-L>
 
+" Use xclip for copying and pasting.
+vnoremap <C-C> :w !xclip -i -sel c<CR><CR>
+
+
 "------------------------------------------------------------
 " Config {{{1
 "

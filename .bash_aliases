@@ -38,11 +38,10 @@ alias ls="ls -AF --color=auto" \
     searchsploit="/opt/exploit-database/searchsploit" \
     ..="cd .." \
     rr="curl -s -L http://bit.ly/10hA8iC | bash" \
-    mirror="sudo reflector -f 30 -l 30 --number 10 --verbose --save /etc/pacman.d/mirrorlist-arch" \
-    mirrord="sudo reflector --latest 50 --number 20 --sort delay --save /etc/pacman.d/mirrorlist-arch" \
-    mirrors="sudo reflector --latest 50 --number 20 --sort score --save /etc/pacman.d/mirrorlist-arch" \
-    mirrora="sudo reflector --latest 50 --number 20 --sort age --save /etc/pacman.d/mirrorlist-arch" \
-    fullmirror="/usr/bin/update-artix" \
+    mirror="sudo reflector -f 30 -l 30 --number 10 --verbose --save /etc/pacman.d/mirrorlist" \
+    mirrord="sudo reflector --latest 50 --number 20 --sort delay --save /etc/pacman.d/mirrorlist" \
+    mirrors="sudo reflector --latest 50 --number 20 --sort score --save /etc/pacman.d/mirrorlist" \
+    mirrora="sudo reflector --latest 50 --number 20 --sort age --save /etc/pacman.d/mirrorlist" \
     cleanup="sudo pacman -Rns $(pacman -Qtdq)" \
     grep="grep --color=auto" \
     gits="git status" \

@@ -1,0 +1,81 @@
+23:08:14.071: CPU Name: AMD Ryzen 5 3600X 6-Core Processor
+23:08:14.071: CPU Speed: 3800.000MHz
+23:08:14.071: Physical Cores: 6, Logical Cores: 12
+23:08:14.071: Physical Memory: 15897MB Total, 231MB Free
+23:08:14.071: Kernel Version: Linux 5.18.9-arch1-1
+23:08:14.071: Distribution: "Arch Linux" Unknown
+23:08:14.071: Session Type: tty
+23:08:14.071: Window System: X11.0, Vendor: The X.Org Foundation, Version: 1.21.1
+23:08:14.072: Qt Version: 5.15.5 (runtime), 5.15.3 (compiled)
+23:08:14.072: Portable mode: false
+23:08:14.106: OBS 27.2.4-1 (linux)
+23:08:14.106: ---------------------------------
+23:08:14.107: ---------------------------------
+23:08:14.107: audio settings reset:
+23:08:14.107: 	samples per sec: 48000
+23:08:14.107: 	speakers:        2
+23:08:14.109: ---------------------------------
+23:08:14.109: Initializing OpenGL...
+23:08:14.178: Loading up OpenGL on adapter AMD AMD HAWAII (LLVM 14.0.6, DRM 2.50, 5.18.9-arch1-1)
+23:08:14.178: OpenGL loaded successfully, version 4.5 (Core Profile) Mesa 22.1.3, shading language 4.50
+23:08:14.216: ---------------------------------
+23:08:14.216: video settings reset:
+23:08:14.216: 	base resolution:   1920x1080
+23:08:14.216: 	output resolution: 1280x720
+23:08:14.216: 	downscale filter:  Bicubic
+23:08:14.216: 	fps:               30/1
+23:08:14.216: 	format:            NV12
+23:08:14.216: 	YUV mode:          709/Partial
+23:08:14.216: NV12 texture support not available
+23:08:14.217: Audio monitoring device:
+23:08:14.217: 	name: Default
+23:08:14.217: 	id: default
+23:08:14.217: ---------------------------------
+23:08:14.218: Failed to load 'en-US' text for module: 'decklink-captions.so'
+23:08:14.218: Failed to load 'en-US' text for module: 'decklink-ouput-ui.so'
+23:08:14.219: os_dlopen(/usr//lib/obs-plugins/frontend-tools.so->/usr//lib/obs-plugins/frontend-tools.so): libluajit-5.1.so.2: cannot open shared object file: No such file or directory
+23:08:14.219: 
+23:08:14.219: Module '/usr//lib/obs-plugins/frontend-tools.so' not loaded
+23:08:14.222: A DeckLink iterator could not be created.  The DeckLink drivers may not be installed
+23:08:14.222: No blackmagic support
+23:08:14.229: v4l2loopback not installed, virtual camera disabled
+23:08:14.234: os_dlopen(libnvidia-encode.so.1->libnvidia-encode.so.1): libnvidia-encode.so.1: cannot open shared object file: No such file or directory
+23:08:14.234: 
+23:08:14.234: FFMPEG VAAPI supported
+23:08:14.238: os_dlopen(/usr//lib/obs-plugins/sndio.so->/usr//lib/obs-plugins/sndio.so): libsndio.so.7: cannot open shared object file: No such file or directory
+23:08:14.238: 
+23:08:14.238: Module '/usr//lib/obs-plugins/sndio.so' not loaded
+23:08:14.238: ---------------------------------
+23:08:14.238:   Loaded Modules:
+23:08:14.238:     text-freetype2.so
+23:08:14.238:     rtmp-services.so
+23:08:14.238:     obs-x264.so
+23:08:14.238:     obs-transitions.so
+23:08:14.238:     obs-outputs.so
+23:08:14.238:     obs-libfdk.so
+23:08:14.238:     obs-filters.so
+23:08:14.238:     obs-ffmpeg.so
+23:08:14.238:     linux-v4l2.so
+23:08:14.238:     linux-pulseaudio.so
+23:08:14.238:     linux-jack.so
+23:08:14.238:     linux-decklink.so
+23:08:14.238:     linux-capture.so
+23:08:14.238:     linux-alsa.so
+23:08:14.238:     image-source.so
+23:08:14.238:     decklink-ouput-ui.so
+23:08:14.238:     decklink-captions.so
+23:08:14.238: ---------------------------------
+23:08:14.238: ==== Startup complete ===============================================
+23:08:14.241: No scene file found, creating default scene
+23:08:14.255: All scene data cleared
+23:08:14.255: ------------------------------------------------
+23:08:14.260: pulse-input: Server name: 'PulseAudio (on PipeWire 0.3.53) 15.0.0'
+23:08:14.260: pulse-input: Audio format: s16le, 48000 Hz, 2 channels
+23:08:14.260: pulse-input: Started recording from 'alsa_output.usb-Razer_Razer_Kraken_7.1_V2_00000000-00.analog-stereo.monitor'
+23:08:14.261: pulse-input: Server name: 'PulseAudio (on PipeWire 0.3.53) 15.0.0'
+23:08:14.261: pulse-input: Audio format: s16le, 48000 Hz, 2 channels
+23:08:14.261: pulse-input: Started recording from 'alsa_input.usb-Razer_Razer_Kraken_7.1_V2_00000000-00.analog-stereo'
+23:08:14.261: Switched to scene 'Scene'
+23:08:14.261: Failed to glob scene collections
+23:08:14.866: adding 42 milliseconds of audio buffering, total audio buffering is now 42 milliseconds (source: Desktop Audio)
+23:08:14.866: 
