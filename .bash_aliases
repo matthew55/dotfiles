@@ -44,9 +44,26 @@ alias ls="ls -AF --color=auto" \
     mirrora="sudo reflector --latest 50 --number 20 --sort age --save /etc/pacman.d/mirrorlist" \
     cleanup="sudo pacman -Rns $(pacman -Qtdq)" \
     grep="grep --color=auto" \
-    gits="git status" \
-    gitc="git commit" \
-    gitp="git push" \
+    egrep="egrep --color=auto" \
+    fgrep="fgrep --color=auto" \
+    addup="git add -u" \
+    addall="git add ." \
+    branch="git branch" \
+    checkout="git checkout" \
+    clone="git clone" \
+    commit="git commit" \
+    fetch="git fetch" \
+    pull="git pull origin" \
+    push="git push" \
+    status="git status" \
+    tag="git tag" \
+    newtag="git tag -a" \
     hacker="cmatrix -a -u 3" \
     config="git --git-dir=$HOME/Desktop/coding-stuff/github/matthew55/dotfiles/ --work-tree=$HOME" \
     ascii="figlet" \
+    speedtest.net="speedtest" \
+    df="df -h" \
+    free="free -m" \
+    jctl="journalctl -p 3 -xb" \
+    gpg-check="gpg2 --keyserver-options auto-key-retrieve --verify" \
+    gpg-retrieve="gpg2 --keyserver-options auto-key-retrieve --receive-keys" \

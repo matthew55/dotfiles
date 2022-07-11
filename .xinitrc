@@ -10,7 +10,7 @@ wal -R &
 # urxvtd -q -o -f &
 
  Get numpad working.
-#numlockx &
+numlockx &
 
 # Get clipboard working
 xclip &
