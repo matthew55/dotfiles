@@ -1,4 +1,4 @@
-#!bin/bash
+#!/usr/bin/env bash
 
 # Usage: ex <file>
 ex ()
@@ -25,8 +25,8 @@ ex ()
   fi
 }
 
-alias ls="ls -AF --color=auto" \
-    myip="curl -w \"\n\" ipinfo.io/ip" \
+alias ls="ls -AF --color=auto --group-directories-first" \
+    myip="curl ifconfig.co" \
     pacman="pacman --color=auto" \
     yay="yay --color=auto" \
     maven="mvn" \
@@ -67,3 +67,7 @@ alias ls="ls -AF --color=auto" \
     jctl="journalctl -p 3 -xb" \
     gpg-check="gpg2 --keyserver-options auto-key-retrieve --verify" \
     gpg-retrieve="gpg2 --keyserver-options auto-key-retrieve --receive-keys" \
+    clock="tty-clock -c" \
+    clocks="tty-clock -sc" \
+    audiovis="cava" \
+    weather="curl wttr.in" \
