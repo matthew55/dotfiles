@@ -24,7 +24,7 @@ export _JAVA_AWT_WM_NONREPARENTING=1
 # Prevent ranger from loading default config.
 export RANGER_LOAD_DEFAULT_RC="false"
 # Qt5ct environmental variable
-export QT_QPA_PLATFORMTHEME="gtk2" # Have QT use gtk2 theme.
+export QT_QPA_PLATFORMTHEME="gt5ct"
 export MOZ_WEBRENDER=1
 
 export PATH="$PATH:/$HOME/.local/bin"

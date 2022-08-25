@@ -33,7 +33,6 @@ alias ls="ls -AF --color=auto --group-directories-first" \
     gradle.bat="gradle" \
     gradlew="gradle" \
     gradlew.bat="gradle" \
-    lastpass="lpass" \
     xclip="xclip -selection clipboard" \
     searchsploit="/opt/exploit-database/searchsploit" \
     ..="cd .." \
@@ -60,14 +59,11 @@ alias ls="ls -AF --color=auto --group-directories-first" \
     newtag="git tag -a" \
     hacker="cmatrix -a -u 3" \
     config="git --git-dir=$HOME/Desktop/coding-stuff/github/matthew55/dotfiles/ --work-tree=$HOME" \
-    ascii="figlet" \
     speedtest.net="speedtest" \
     df="df -h" \
     free="free -m" \
     jctl="journalctl -p 3 -xb" \
     gpg-check="gpg2 --keyserver-options auto-key-retrieve --verify" \
     gpg-retrieve="gpg2 --keyserver-options auto-key-retrieve --receive-keys" \
-    clock="tty-clock -c" \
-    clocks="tty-clock -sc" \
-    audiovis="cava" \
     weather="curl wttr.in" \
+    sbs="cd ~/.local/bin/statusbar" \

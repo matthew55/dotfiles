@@ -1,0 +1,4 @@
+#!/bin/sh
+
+yay -Syyu
+pkill -RTMIN+8 "${STATUSBAR:-dwmblocks}"

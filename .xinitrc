@@ -18,6 +18,9 @@ xclip &
 # Hide cursor when it isn't needed.
 unclutter &
 
+# Setup notifications.
+dunst &
+
 # Changes caps to be escape
 setxkbmap -option caps:escape
 
@@ -25,5 +28,5 @@ setxkbmap -option caps:escape
 [[ -f ~/.Xresources ]] && xrdb -merge -I$HOME ~/.Xresources && xrdb -merge ~/.cache/wal/colors.Xresources
 
 # Start our display manager
-#dwmblocks &
+dwmblocks &
 exec dwm
