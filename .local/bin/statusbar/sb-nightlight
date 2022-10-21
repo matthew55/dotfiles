@@ -1,0 +1,33 @@
+#!/bin/sh
+# Adjustable night light that makes use of xsct.
+# Use the scroll wheels to adjust the night light.
+
+colortemp="$(xsct | cut -d' ' -f5)"
+inc=100
+
+if [ "$colortemp" -lt 6500 ]; then  
+	icon="🌙" && enabled="enabled"
+else
+	icon="☀️" && enabled="disabled"
+fi
+
+case $BLOCK_BUTTON in
+	1) nightlight ;;
+	3) 
+		notify-send "$icon Night Light" "\- Night light $enabled.
+- Scroll to change adjust night light.
+- Click to activate night light." ;;
+	4)  increasecolor=$(( colortemp + inc ))
+		[ 6500 -lt $increasecolor ] && lower=6500 || lower="$increasecolor" 
+		xsct $lower ;;
+	5) 	decreasecolor=$(( colortemp - inc ))
+		[ 900 -gt $decreasecolor ] && higher=900 || higher="$decreasecolor" 
+		xsct $higher ;;
+	6) "$TERMINAL" -e "$EDITOR" "$0" ;;
+esac
+
+# Show nightlight status
+colortemp="$(xsct | cut -d' ' -f5)"
+[ "$colortemp" -lt 6500 ] && night="🌙" || night="☀️"
+
+printf "$night" "\\n"
