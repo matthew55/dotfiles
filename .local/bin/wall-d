@@ -101,7 +101,7 @@ fi
 
 Single(){
     if [ "$randomly" = "True" ]; then
-        walls=$(du -a $DIR | grep 'jpg\|jpeg\|png\|gif' | shuf -n 1 | awk '{print $2}')
+        walls=$(du -a $DIR | grep 'jpg\|jpeg\|png\gif' | shuf -n 1 | awk '{print $2}')
     else
         walls=$(sxiv -t -o -b -g $location $DIR | xargs)  # running sxiv in thumbnail mode.
     fi
@@ -110,23 +110,22 @@ Single(){
     # if no picture is marked in sxiv, exit.
     [ -z "$walls" ] && exit 0
 
-    echo "$ShowOptions"
     if [ "$ShowOptions" = "True" ];
     then
         if [ "$UseRofi" = "True" ] && [ "$UseFeh" = "True" ];
         then
-                        WallMenu="rofi -dmenu -i -l 5 -p "Options""
+                        WallMenu="rofi -dmenu -i -l 6 -p "Options""
                         WallOptions=$(echo -e "fill\ncenter\ntile\nscale\nno-xinerama" | $WallMenu)
         elif [ "$UseRofi" = "True" ] && [ "$UseFeh" = "False" ];
         then
-                        WallMenu="rofi -dmenu -i -l 5 -p "Options""
+                        WallMenu="rofi -dmenu -i -l 6 -p "Options""
                         WallOptions=$(echo -e "zoom\ncenter\ntile\nstretch\nno-randr" | $WallMenu)
         elif [ "$UseRofi" = "False" ] && [ "$UseFeh" = "True" ];
         then
-                        WallMenu="dmenu $colorOptions -i -l 5 -p "Options""
+                        WallMenu="dmenu $colorOptions -i -l 6 -p "Options""
                         WallOptions=$(echo -e "fill\ncenter\ntile\nscale\nno-xinerama" | $WallMenu)
         else
-                        WallMenu="dmenu $colorOptions -i -l 5 -p "Options""
+                        WallMenu="dmenu $colorOptions -i -l 6 -p "Options""
                         WallOptions=$(echo -e "zoom\ncenter\ntile\nstretch\nno-randr" | $WallMenu)
         fi
     else
@@ -140,7 +139,14 @@ Single(){
 
     [ -z "$WallOptions" ] && exit 0
 
-    if [ "$OnlyBetterlockscreen" = "True" ]; then
+    [ "$WithPywall" = "True" ] && wal -i $wall1 -n && xsetroot -name "fsignal:1"
+
+	# Kill animated wallpapers before setting next wallpaper 
+	killall xwinwrap 2>/dev/null
+
+	if [ "$(echo $wall1 | sed 's/.*\.//')" = "gif" ]; then
+		xwinwrap -ov -ni -fs -- mpv -wid WID --keepaspect=no --loop $wall1
+    elif [ "$OnlyBetterlockscreen" = "True" ]; then
         betterlockscreen -u $wall1 -r $Resolution1
     else
     if [ "$UseFeh" = "True" ];
@@ -150,9 +156,6 @@ Single(){
                     xwallpaper --$WallOptions $wall1  && sed -i "s|xwallpaper.*|xwallpaper  --$WallOptions $wall1|" $HOME/.local/bin/defaultwallpaper.sh
 				fi
     fi
-
-    [ "$WithPywall" = "True" ] && wal -i $wall1 -n && xsetroot -name "fsignal:1"
-
 
     if [ "$WithBetterlockscreen" = "True" ]; then
         dunstify "Wall-d" "$startMessage"
