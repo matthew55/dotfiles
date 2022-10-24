@@ -3,8 +3,9 @@
 #[ ! -f ~/.fehbg ] && feh --bg-scale //Pictures/desktop-backgrounds/city-night.png
 picom -b
 
-# Restore the last colorscheme that was in use.
-wal -R &
+# Restore the last colorscheme and wallpaper that was in use.
+wal -R >/dev/null
+wall-d -f -r >/dev/null
 
 # Start URxvt dameon for ram useage improvements.
 # urxvtd -q -o -f &
