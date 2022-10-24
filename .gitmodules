@@ -1,9 +1,0 @@
-[submodule ".config/dmenu"]
-	path = .config/dmenu
-	url = https://github.com/LukeSmithxyz/dmenu
-[submodule ".config/st"]
-	path = .config/st
-	url = https://github.com/LukeSmithxyz/st
-[submodule ".config/sxiv"]
-	path = .config/sxiv
-	url = https://github.com/muennich/sxiv

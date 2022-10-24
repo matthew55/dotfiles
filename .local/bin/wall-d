@@ -47,12 +47,14 @@ UseRofi="False"
 
 # function to reset the last set wallpaper(s)
 restore() {
-		if [ "$UseFeh" = "True" ];
-		then
-				~/.fehbg &
-		else
-				defaultwallpaper.sh
-		fi
+	lastwall="$(cat $HOME/.local/bin/lastwallpaper)"
+	[ -f $lastwall] && if [ "$(echo $lastwall | sed 's/.*\.//')" = "gif" ]; then
+		xwinwrap -ov -ni -fs -- mpv -wid WID --keepaspect=no --loop $lastwall &
+	elif [ "$UseFeh" = "True" ]; then
+			~/.fehbg &
+	else
+			defaultwallpaper.sh
+	fi
 }
 
 # help message
@@ -101,7 +103,7 @@ fi
 
 Single(){
     if [ "$randomly" = "True" ]; then
-        walls=$(du -a $DIR | grep 'jpg\|jpeg\|png\gif' | shuf -n 1 | awk '{print $2}')
+        walls=$(du -a $DIR | grep 'jpg\|jpeg\|png\|gif\|mp4\' | shuf -n 1 | awk '{print $2}')
     else
         walls=$(sxiv -t -o -b -g $location $DIR | xargs)  # running sxiv in thumbnail mode.
     fi
@@ -114,18 +116,18 @@ Single(){
     then
         if [ "$UseRofi" = "True" ] && [ "$UseFeh" = "True" ];
         then
-                        WallMenu="rofi -dmenu -i -l 6 -p "Options""
+                        WallMenu="rofi -dmenu -i -l 5 -p "Options""
                         WallOptions=$(echo -e "fill\ncenter\ntile\nscale\nno-xinerama" | $WallMenu)
         elif [ "$UseRofi" = "True" ] && [ "$UseFeh" = "False" ];
         then
-                        WallMenu="rofi -dmenu -i -l 6 -p "Options""
+                        WallMenu="rofi -dmenu -i -l 5 -p "Options""
                         WallOptions=$(echo -e "zoom\ncenter\ntile\nstretch\nno-randr" | $WallMenu)
         elif [ "$UseRofi" = "False" ] && [ "$UseFeh" = "True" ];
         then
-                        WallMenu="dmenu $colorOptions -i -l 6 -p "Options""
+                        WallMenu="dmenu $colorOptions -i -l 5 -p "Options""
                         WallOptions=$(echo -e "fill\ncenter\ntile\nscale\nno-xinerama" | $WallMenu)
         else
-                        WallMenu="dmenu $colorOptions -i -l 6 -p "Options""
+                        WallMenu="dmenu $colorOptions -i -l 5 -p "Options""
                         WallOptions=$(echo -e "zoom\ncenter\ntile\nstretch\nno-randr" | $WallMenu)
         fi
     else
@@ -139,13 +141,14 @@ Single(){
 
     [ -z "$WallOptions" ] && exit 0
 
-    [ "$WithPywall" = "True" ] && wal -i $wall1 -n && xsetroot -name "fsignal:1"
-
 	# Kill animated wallpapers before setting next wallpaper 
 	killall xwinwrap 2>/dev/null
+	
+	# Write last wallpaper to file.
+	echo "$wall1" > "$HOME/.local/bin/lastwallpaper"
 
 	if [ "$(echo $wall1 | sed 's/.*\.//')" = "gif" ]; then
-		xwinwrap -ov -ni -fs -- mpv -wid WID --keepaspect=no --loop $wall1
+		xwinwrap -ov -ni -fs -- mpv -wid WID --keepaspect=no --loop $wall1 &
     elif [ "$OnlyBetterlockscreen" = "True" ]; then
         betterlockscreen -u $wall1 -r $Resolution1
     else
@@ -156,6 +159,8 @@ Single(){
                     xwallpaper --$WallOptions $wall1  && sed -i "s|xwallpaper.*|xwallpaper  --$WallOptions $wall1|" $HOME/.local/bin/defaultwallpaper.sh
 				fi
     fi
+
+    [ "$WithPywall" = "True" ] && wal -i $wall1 -n && xsetroot -name "fsignal:1"
 
     if [ "$WithBetterlockscreen" = "True" ]; then
         dunstify "Wall-d" "$startMessage"

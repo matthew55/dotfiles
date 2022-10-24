@@ -66,4 +66,6 @@ alias ls="ls -AF --color=auto --group-directories-first" \
     gpg-check="gpg2 --keyserver-options auto-key-retrieve --verify" \
     gpg-retrieve="gpg2 --keyserver-options auto-key-retrieve --receive-keys" \
     weather="curl wttr.in" \
+    sb="cd ~/.local/bin/" \
     sbs="cd ~/.local/bin/statusbar" \
+    sbd="cd ~/.local/bin/dmenu-scripts" \
