@@ -32,8 +32,11 @@ fi
 
 # Enable VI mode.
 bindkey -v
-# Make backspace work as you would expect it to.
+# Make backspace & delete work as you would expect them to.
 bindkey "^?" backward-delete-char
+bindkey "^[[P" delete-char
+bindkey "^H" backward-kill-word
+bindkey "^[[M" kill-word
 # Set key delay to 10ms.
 KEYTIMEOUT=1
 # Change cursor shape for different VI modes.

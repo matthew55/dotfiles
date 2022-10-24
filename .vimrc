@@ -185,6 +185,7 @@ Plug 'ap/vim-css-color'
 Plug 'tpope/vim-surround'
 Plug 'scrooloose/syntastic'
 Plug 'elzr/vim-json'
+Plug 'tpope/vim-fugitive'
 
 call plug#end()
 "------------------------------------------------------------
