@@ -26,7 +26,7 @@ dunst &
 setxkbmap -option caps:escape
 
 # Load Xresources and redirect xrdb to PyWal's Xresource's file.
-[[ -f ~/.Xresources ]] && xrdb -merge -I$HOME ~/.Xresources && xrdb -merge ~/.cache/wal/colors.Xresources
+[[ -f ${XDG_CONFIG_HOME:-$HOME/.config}/x11/.Xresources ]] && xrdb -merge -I$HOME ${XDG_CONFIG_HOME:-$HOME/.config}/.Xresources && xrdb -merge {XDG_CACHE_HOME:-$HOME/.cache/wal/colors.Xresources
 
 # Start our display manager
 dwmblocks &

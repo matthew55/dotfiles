@@ -1,0 +1,64 @@
+#!/usr/bin/env bash
+
+if [ -n "$DESKTOP_SESSION" ];then
+    eval $(/usr/bin/gnome-keyring-daemon --start, --components=gpg,pkcs11,secrets,ssh)
+    export GPG_AGENT_INFO GNOME_KEYRING_CONTROL GNOME_KEYRING_PID SSH_AUTH_SOCK 
+fi
+
+# Get proper colors.
+export TERM="xterm-256color"
+# Set default text editor.
+export EDITOR="vim"
+# Set default terminal.
+export TERMINAL="st"
+# Set default browser.
+export BROWSER="firefox"
+# Fix window-frames in vieb browser.
+export VIEB_WINDOW_FRAME="true"
+# Fix white screen of death in Java AWT programs.
+export _JAVA_AWT_WM_NONREPARENTING=1
+# Prevent ranger from loading default config.
+export RANGER_LOAD_DEFAULT_RC="false"
+# Qt5ct environmental variable
+export QT_QPA_PLATFORMTHEME="qt5ct"
+export MOZ_WEBRENDER=1
+
+# Paths
+export PATH="$PATH:/$HOME/.local/bin"
+export PATH="$PATH:/$HOME/.local/bin/statusbar"
+export PATH="$PATH:/$HOME/.local/bin/dmenu-scripts/"
+
+# ~/ Clean-up:
+export XDG_CONFIG_HOME="$HOME/.config"
+export XDG_DATA_HOME="$HOME/.local/share"
+export XDG_CACHE_HOME="$HOME/.cache"
+export XDG_STATE_HOME="${XDG_DATA_HOME:-$HOME/.local/share}/state"
+export XINITRC="${XDG_CONFIG_HOME:-$HOME/.config}/x11/xinitrc"
+export XAUTHORITY="$XDG_RUNTIME_DIR/Xauthority" # This line will break some DMs.
+export NOTMUCH_CONFIG="${XDG_CONFIG_HOME:-$HOME/.config}/notmuch-config"
+export GTK2_RC_FILES="${XDG_CONFIG_HOME:-$HOME/.config}/gtk-2.0/gtkrc-2.0"
+export LESSHISTFILE="-"
+export WGETRC="${XDG_CONFIG_HOME:-$HOME/.config}/wget/wgetrc"
+export INPUTRC="${XDG_CONFIG_HOME:-$HOME/.config}/shell/inputrc"
+export ZDOTDIR="${XDG_CONFIG_HOME:-$HOME/.config}/zsh"
+compinit -d $XDG_CACHE_HOME/zsh/zcompdump-$ZSH_VERSION
+#export ALSA_CONFIG_PATH="$XDG_CONFIG_HOME/alsa/asoundrc"
+export GNUPGHOME="${XDG_DATA_HOME:-$HOME/.local/share}/gnupg"
+export WINEPREFIX="${XDG_DATA_HOME:-$HOME/.local/share}/wineprefixes/default"
+export PASSWORD_STORE_DIR="${XDG_DATA_HOME:-$HOME/.local/share}/password-store"
+export TMUX_TMPDIR="$XDG_RUNTIME_DIR"
+export ANDROID_SDK_HOME="${XDG_CONFIG_HOME:-$HOME/.config}/android"
+export CARGO_HOME="${XDG_DATA_HOME:-$HOME/.local/share}/cargo"
+export GOPATH="${XDG_DATA_HOME:-$HOME/.local/share}/go"
+export HISTFILE="${XDG_DATA_HOME:-$HOME/.local/share}/history"
+export ELECTRUMDIR="${XDG_DATA_HOME:-$HOME/.local/share}/electrum"
+export GVIMINIT='let $MYGVIMRC="$XDG_CONFIG_HOME/vim/gvimrc" | source $MYGVIMRC'
+export VIMINIT='let $MYVIMRC="$XDG_CONFIG_HOME/vim/vimrc" | source $MYVIMRC'
+export GRADLE_USER_HOME="$XDG_DATA_HOME"/gradle
+export _JAVA_OPTIONS=-Djava.util.prefs.userRoot="$XDG_CONFIG_HOME"/java
+
+# Auto start xorg on login.
+if [ "$(tty)" = "/dev/tty1" ]; then
+    startx "$XINITRC"
+fi
+

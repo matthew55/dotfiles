@@ -7,9 +7,7 @@ HISTSIZE=1000
 SAVEHIST=1000
 
 # Run custom bash_aliase file to store aliases in one location.
-if [ -f ~/.bash_aliases ]; then
-    . ~/.bash_aliases
-fi
+[ -f "${XDG_CONFIG_HOME:-$HOME/.config}/shell/aliasrc" ] && source "${XDG_CONFIG_HOME:-$HOME/.config}/shell/aliasrc"
 
 # Enable colors and change prompt:
 autoload -U colors && colors  # Load colors

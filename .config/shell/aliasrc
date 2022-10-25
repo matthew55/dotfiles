@@ -1,5 +1,8 @@
 #!/usr/bin/env bash
 
+# Use $XINITRC variable if file exists.
+[ -f "$XINITRC" ] && alias startx="startx $XINITRC"
+
 # Usage: ex <file>
 ex ()
 {
