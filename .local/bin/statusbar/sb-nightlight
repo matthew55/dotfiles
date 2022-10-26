@@ -8,7 +8,7 @@ inc=100
 if [ "$colortemp" -lt 6500 ]; then  
 	icon="🌙" && enabled="enabled"
 else
-	icon="☀️" && enabled="disabled"
+	icon="🌞" && enabled="disabled"
 fi
 
 case $BLOCK_BUTTON in
@@ -28,6 +28,6 @@ esac
 
 # Show nightlight status
 colortemp="$(xsct | cut -d' ' -f5)"
-[ "$colortemp" -lt 6500 ] && night="🌙" || night="☀️"
+[ "$colortemp" -lt 6500 ] && night="🌙" || night="🌞"
 
 printf "$night" "\\n"
