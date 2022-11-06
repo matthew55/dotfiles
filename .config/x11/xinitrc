@@ -1,7 +1,7 @@
 # Desktop background and transparency.
 #[ -f ~/.fehbg ] && sh ~/.fehbg &
 #[ ! -f ~/.fehbg ] && feh --bg-scale //Pictures/desktop-backgrounds/city-night.png
-picom -b
+picom -b 
 
 # Restore the last colorscheme and wallpaper that was in use.
 wal -R >/dev/null

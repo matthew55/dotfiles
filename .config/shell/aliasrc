@@ -44,7 +44,7 @@ alias ls="ls -AF --color=auto --group-directories-first" \
     mirrord="sudo reflector --latest 50 --number 20 --sort delay --save /etc/pacman.d/mirrorlist" \
     mirrors="sudo reflector --latest 50 --number 20 --sort score --save /etc/pacman.d/mirrorlist" \
     mirrora="sudo reflector --latest 50 --number 20 --sort age --save /etc/pacman.d/mirrorlist" \
-    cleanup="sudo pacman -Rns $(pacman -Qtdq)" \
+    cleanup="sudo pacman -Rncs $(pacman -Qtdq)" \
     grep="grep --color=auto" \
     egrep="egrep --color=auto" \
     fgrep="fgrep --color=auto" \
@@ -72,3 +72,4 @@ alias ls="ls -AF --color=auto --group-directories-first" \
     sb="cd ~/.local/bin/" \
     sbs="cd ~/.local/bin/statusbar" \
     sbd="cd ~/.local/bin/dmenu-scripts" \
+	yarn="yarn --use-yarnrc ${XDG_CONFIG_HOME:-$HOME/.config}/yarn/config" \

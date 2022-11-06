@@ -147,7 +147,7 @@ Single(){
 	# Write last wallpaper to file.
 	echo "$wall1" > "$HOME/.local/bin/lastwallpaper"
 
-	if [ "$(echo $wall1 | sed 's/.*\.//')" = "gif" ]; then
+	if [ "$(echo $wall1 | sed 's/.*\.//')" = "gif" ] && [ "$ShowOptions" = "False" ]; then
 		xwinwrap -ov -ni -fs -- mpv -wid WID --keepaspect=no --loop $wall1 &
     elif [ "$OnlyBetterlockscreen" = "True" ]; then
         betterlockscreen -u $wall1 -r $Resolution1
