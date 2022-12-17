@@ -11,4 +11,4 @@ case $BLOCK_BUTTON in
 	6) "$TERMINAL" -e "$EDITOR" "$0" ;;
 esac
 
-checkupdates | grep -Fcv "[ignored]" | sed "s/^/📦/;"
+checkupdates 2>/dev/null | grep -Fcv "[ignored]" | sed "s/^/📦/;"
