@@ -65,6 +65,7 @@ alias \
     myip="curl ifconfig.co" \
     pacman="pacman --color=auto" \
     yay="yay --color=auto" \
+	py="python" \
     maven="mvn" \
     gradle.bat="gradle" \
     gradlew="gradle" \
