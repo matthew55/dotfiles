@@ -83,6 +83,7 @@ alias \
     checkout="git checkout" \
     clone="git clone" \
     commit="git commit" \
+	diff="git diff" \
     fetch="git fetch" \
     pull="git pull origin" \
     push="git push" \
@@ -110,6 +111,7 @@ alias \
 	codingj="cd ~/Desktop/coding-stuff/java" \
 	codingjs="cd ~/Desktop/coding-stuff/javascript" \
 	codingp="cd ~/Desktop/coding-stuff/python"\
+	codingr="cd ~/Desktop/coding-stuff/ruby"\
 	codingg="cd ~/Desktop/coding-stuff/github" \
 	codinggc="cd ~/Desktop/coding-stuff/github/clones" \
 	codinggcc="cd ~/Desktop/coding-stuff/github/clones/c" \
