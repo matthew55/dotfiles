@@ -49,34 +49,47 @@ alias \
 	mkd="mkdir -pv" \
 	yt="yt-dlp --embed-metadata -i" \
 	yta="yt -x -f bestaudio/best" \
-	ffmpeg="ffmpeg -hide_banner"
+	ffmpeg="ffmpeg -hide_banner" \
+    df="df -h" \
+    free="free -m" \
+    jctl="journalctl -p 3 -xb" \
 
 # Colorize commands when possible.
 alias \
 	ls="ls -hFN --color=auto --group-directories-first" \
 	grep="grep --color=auto" \
 	diff="diff --color=auto" \
-	ip="ip -color=auto"
+	ip="ip -color=auto" \
+    yay="yay --color=auto" \
+    pacman="pacman --color=auto"
 
 alias \
 	la="ls -A" \
 	ll="ls -l" \
 	lal="ls -lA" \
-    myip="curl ifconfig.co" \
-    pacman="pacman --color=auto" \
-    yay="yay --color=auto" \
+    cmatrix="cmatrix -a -u 3" \
+    xclip="xclip -selection clipboard" \
+	yarn="yarn --use-yarnrc ${XDG_CONFIG_HOME:-$HOME/.config}/yarn/config" \
+	sxiv="nsxiv" \
 	py="python" \
     maven="mvn" \
     gradle.bat="gradle" \
     gradlew="gradle" \
     gradlew.bat="gradle" \
-    xclip="xclip -selection clipboard" \
-    rr="curl -s -L http://bit.ly/10hA8iC | bash" \
+    speedtest.net="speedtest" \
     mirror="sudo reflector -f 30 -l 30 --number 10 --verbose --save /etc/pacman.d/mirrorlist" \
     mirrord="sudo reflector --latest 50 --number 20 --sort delay --save /etc/pacman.d/mirrorlist" \
     mirrors="sudo reflector --latest 50 --number 20 --sort score --save /etc/pacman.d/mirrorlist" \
     mirrora="sudo reflector --latest 50 --number 20 --sort age --save /etc/pacman.d/mirrorlist" \
     cleanup="sudo pacman -Rncs $(pacman -Qtdq)" \
+    gpg-check="gpg2 --keyserver-options auto-key-retrieve --verify" \
+    gpg-retrieve="gpg2 --keyserver-options auto-key-retrieve --receive-keys" \
+    myip="curl ifconfig.co" \
+    rr="curl -s -L http://bit.ly/10hA8iC | bash" \
+    weather="curl wttr.in" 
+
+# Github Aliases
+ alias \
     addup="git add -u" \
     addall="git add ." \
     branch="git branch" \
@@ -90,16 +103,7 @@ alias \
     status="git status" \
     tag="git tag" \
     newtag="git tag -a" \
-    hacker="cmatrix -a -u 3" \
-    config="git --git-dir=$HOME/Desktop/coding-stuff/github/matthew55/dotfiles/ --work-tree=$HOME" \
-    speedtest.net="speedtest" \
-    df="df -h" \
-    free="free -m" \
-    jctl="journalctl -p 3 -xb" \
-    gpg-check="gpg2 --keyserver-options auto-key-retrieve --verify" \
-    gpg-retrieve="gpg2 --keyserver-options auto-key-retrieve --receive-keys" \
-    weather="curl wttr.in" \
-	yarn="yarn --use-yarnrc ${XDG_CONFIG_HOME:-$HOME/.config}/yarn/config"
+    config="git --git-dir=$HOME/Desktop/coding-stuff/github/matthew55/dotfiles/ --work-tree=$HOME"
 
 # My many programing directories.
 alias \
