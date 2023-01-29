@@ -13,9 +13,6 @@ map J zoom out
 map i recolor
 map p print
 map gg goto top
-map B set "first-page-column 1:1"
-map <C-b> set "first-page-column 1:2"
-
 
 set default-bg                     "{background}"
 set default-fg                     "{foreground}"
