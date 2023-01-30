@@ -4,7 +4,7 @@
 picom -b 
 
 # Restore the last colorscheme and wallpaper that was in use.
-wal -R >/dev/null
+wal -Rq -o "${XDG_CONFIG_HOME:-$HOME/.config}/wal/postrun"
 wall-d -f -r >/dev/null
 
 # Start URxvt dameon for ram useage improvements.

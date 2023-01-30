@@ -10,25 +10,25 @@
 DIR="" # Path to wallpapers directory
 defaultwallpaper="$HOME/.local/bin/defaultwallpaper.sh"
 
-[ -f $defaultwallpaper ] || echo xwallpaper >> ~/.local/bin/defaultwallpaper.sh && chmod +x ~/.local/bin/defaultwallpaper.sh
+[ -f "$defaultwallpaper" ] || echo xwallpaper >>"$HOME/.local/bin/defaultwallpaper.sh" && chmod +x "$HOME/.local/bin/defaultwallpaper.sh"
 
 Monitors=$(xrandr --listactivemonitors)
 MonitorLines=$(echo "$Monitors" | grep "+")
-ActiveMonitors=$(echo "${MonitorLines##* }")
+ActiveMonitors="${MonitorLines##*}"
 Monitor1=$(echo "$ActiveMonitors" | sed -n 1p) # Select the first monitor for dual mode
-[ ! -z $Monitor1 ] && var="$(echo "$MonitorLines" | grep $Monitor1 | grep -Po "\d+(?=/)" | tr "\n" "x")" && Resolution1=${var::-1}
+[ -n "$Monitor1" ] && var="$(echo "$MonitorLines" | grep "$Monitor1" | grep -Po "\d+(?=/)" | tr "\n" "x")" && Resolution1=${var::-1}
 Monitor2=$(echo "$ActiveMonitors" | sed -n 2p) # Select the second monitor for dual mode
-[ ! -z $Monitor2 ] && var="$(echo "$MonitorLines" | grep $Monitor2 | grep -Po "\d+(?=/)" | tr "\n" "x")" && Resolution2=${var::-1}
+[ -n "$Monitor2" ] && var="$(echo "$MonitorLines" | grep "$Monitor2" | grep -Po "\d+(?=/)" | tr "\n" "x")" && Resolution2=${var::-1}
 Monitor3=$(echo "$ActiveMonitors" | sed -n 3p) # Select the third monitor for triple mode
-[ ! -z $Monitor3 ] && var="$(echo "$MonitorLines" | grep $Monitor3 | grep -Po "\d+(?=/)" | tr "\n" "x")" && Resolution2=${var::-1}
+[ -n "$Monitor3" ] && var="$(echo "$MonitorLines" | grep "$Monitor3" | grep -Po "\d+(?=/)" | tr "\n" "x")" && Resolution2=${var::-1}
 # get number of avilable active monitors
-NumOfMonitors=$(echo "$Monitors" | grep "+" | wc -l)
+NumOfMonitors=$(echo "$Monitors" | grep -c "+")
 # get screen resulotion to calculate the center
-x=$(echo "${Resolution1%%x*}")
-y=$(echo "${Resolution1##*x}")
+x="${Resolution1%%x*}"
+y="${Resolution1##*x}"
 xl=$(echo "($x-1000)/2" | bc)
 yl=$(echo "($y-750)/2" | bc)
-location=$(echo 1000x750+$xl+$yl)
+location="1000x750+$xl+$yl"
 # will be set to true when using -p flag to activate pywal
 WithPywall="False"
 # will be set to true when using -o flag to show options
@@ -46,14 +46,14 @@ UseRofi="False"
 
 # function to reset the last set wallpaper(s)
 restore() {
-	lastwall="$(cat $HOME/.local/bin/lastwallpaper)"
-	[ -f $lastwall] && if [ "$(echo $lastwall | sed 's/.*\.//')" = "gif" ]; then
-		xwinwrap -ov -ni -fs -- mpv --mute=yes --no-audio --no-osc --msg-level=all=no -wid WID --keepaspect=no --loop $lastwall &
-	elif [ "$UseFeh" = "True" ]; then
-			~/.fehbg &
-	else
-			defaultwallpaper.sh
-	fi
+    lastwall="$(cat "$HOME/.local/bin/lastwallpaper")"
+    if [ -f "$lastwall" ] && [ "${lastwall//*\./}" = "gif" ]; then
+        xwinwrap -ov -ni -fs -- mpv --mute=yes --no-audio --no-osc --msg-level=all=no -wid WID --keepaspect=no --loop "$lastwall" &
+    elif [ "$UseFeh" = "True" ]; then
+        "$HOME/.fehbg" &
+    else
+        defaultwallpaper.sh
+    fi
 }
 
 # help message
@@ -76,62 +76,57 @@ usage() {
 
 while getopts :d:rhpbnolfR option; do
     case "${option}" in
-        d) DIR=${OPTARG};;
-        r) restore && exit;;
-        p) WithPywall="True" ;;
-        o) ShowOptions="True" ;;
-        b) WithBetterlockscreen="True" ;;
-        l) OnlyBetterlockscreen="True" ;;
-        n) randomly="True" ;;
-        h) usage && exit 0 ;;
-        f) UseFeh="True" ;;
-        R) UseRofi="True" ;;
-        *) usage && exit 0
+    d) DIR=${OPTARG} ;;
+    r) restore && exit ;;
+    p) WithPywall="True" ;;
+    o) ShowOptions="True" ;;
+    b) WithBetterlockscreen="True" ;;
+    l) OnlyBetterlockscreen="True" ;;
+    n) randomly="True" ;;
+    h) usage && exit 0 ;;
+    f) UseFeh="True" ;;
+    R) UseRofi="True" ;;
+    *) usage && exit 0 ;;
     esac
 done
 
 [ -z "$DIR" ] && usage && exit 0 # if no directory is set, print help message and exit
 
 #  show dmenu in pywal colors only if ran with -p flag
-source ~/.cache/wal/colors.sh
+source "$HOME"/.cache/wal/colors.sh
 if [ "$WithPywall" = "True" ]; then
     colorOptions="-nb $color0 -nf $color15 -sb $color1 -sf $color15"
 else
     colorOptions=""
 fi
 
-Single(){
+Single() {
     if [ "$randomly" = "True" ]; then
-        walls=$(du -a $DIR | grep 'jpg\|jpeg\|png\|gif\|mp4\' | shuf -n 1 | awk '{print $2}')
+        walls=$(du -a "$DIR" | grep 'jpg\|jpeg\|png\|gif\|mp4' | shuf -n 1 | awk '{print $2}')
     else
-        walls=$(nsxiv -t -o -b -g $location $DIR | xargs)  # running nsxiv in thumbnail mode.
+        walls=$(nsxiv -t -o -b -g "$location" "$DIR" | xargs) # running nsxiv in thumbnail mode.
     fi
     wall1=$(printf "%s" "$walls" | awk '{w = 1; for (--w; w >=0; w--){printf "%s\t",$(NF-w)}print ""}') # Only print the last marked Wallpaper
 
     # if no picture is marked in nsxiv, exit.
     [ -z "$walls" ] && exit 0
 
-    if [ "$ShowOptions" = "True" ];
-    then
-        if [ "$UseRofi" = "True" ] && [ "$UseFeh" = "True" ];
-        then
-                        WallMenu="rofi -dmenu -i -l 5 -p "Options""
-                        WallOptions=$(echo -e "fill\ncenter\ntile\nscale" | $WallMenu)
-        elif [ "$UseRofi" = "True" ] && [ "$UseFeh" = "False" ];
-        then
-                        WallMenu="rofi -dmenu -i -l 5 -p "Options""
-                        WallOptions=$(echo -e "zoom\ncenter\ntile\nstretch\nno-randr" | $WallMenu)
-        elif [ "$UseRofi" = "False" ] && [ "$UseFeh" = "True" ];
-        then
-                        WallMenu="dmenu $colorOptions -i -l 5 -p "Options""
-                        WallOptions=$(echo -e "fill\ncenter\ntile\nscale" | $WallMenu)
+    if [ "$ShowOptions" = "True" ]; then
+        if [ "$UseRofi" = "True" ] && [ "$UseFeh" = "True" ]; then
+            WallMenu="rofi -dmenu -i -l 5 -p Options"
+            WallOptions=$(echo -e "fill\ncenter\ntile\nscale" | $WallMenu)
+        elif [ "$UseRofi" = "True" ] && [ "$UseFeh" = "False" ]; then
+            WallMenu="rofi -dmenu -i -l 5 -p Options"
+            WallOptions=$(echo -e "zoom\ncenter\ntile\nstretch\nno-randr" | $WallMenu)
+        elif [ "$UseRofi" = "False" ] && [ "$UseFeh" = "True" ]; then
+            WallMenu="dmenu $colorOptions -i -l 5 -p Options"
+            WallOptions=$(echo -e "fill\ncenter\ntile\nscale" | $WallMenu)
         else
-                        WallMenu="dmenu $colorOptions -i -l 5 -p "Options""
-                        WallOptions=$(echo -e "zoom\ncenter\ntile\nstretch\nno-randr" | $WallMenu)
+            WallMenu="dmenu $colorOptions -i -l 5 -p Options"
+            WallOptions=$(echo -e "zoom\ncenter\ntile\nstretch\nno-randr" | $WallMenu)
         fi
     else
-        if [ "$UseFeh" = "True" ];
-        then
+        if [ "$UseFeh" = "True" ]; then
             WallOptions="scale"
         else
             WallOptions="stretch"
@@ -140,31 +135,30 @@ Single(){
 
     [ -z "$WallOptions" ] && exit 0
 
-	# Kill animated wallpapers before setting next wallpaper 
-	killall xwinwrap 2>/dev/null
-	
-	# Write last wallpaper to file.
-	echo "$wall1" > "$HOME/.local/bin/lastwallpaper"
+    # Kill animated wallpapers before setting next wallpaper
+    killall -q xwinwrap >/dev/null
 
-	Wall1Extension="$(echo $lwall1 | sed 's/.*\.//')"
-	if [ "$Wall1Extension" = "gif" || "$Wall1Extension" = "mp4" ] && [ "$ShowOptions" = "False" ]; then
-		xwinwrap -ov -ni -fs -- mpv --mute=yes --no-audio --no-osc --msg-level=all=no -wid WID --keepaspect=no --loop $wall1 &
+    # Write last wallpaper to file.
+    echo "$wall1" >"$HOME/.local/bin/lastwallpaper"
+
+    Wall1Extension="${wall1//*\./}"
+    if [ "$Wall1Extension" = "gif" ] || [ "$Wall1Extension" = "mp4" ] && [ "$ShowOptions" = "False" ]; then
+        xwinwrap -ov -ni -fs -- mpv --mute=yes --no-audio --no-osc --msg-level=all=no -wid WID --keepaspect=no --loop "$wall1" &
     elif [ "$OnlyBetterlockscreen" = "True" ]; then
-        betterlockscreen -u $wall1 -r $Resolution1
+        betterlockscreen -u "$wall1" -r "$Resolution1"
     else
-        if [ "$UseFeh" = "True" ];
-        then
+        if [ "$UseFeh" = "True" ]; then
             feh --bg-$WallOptions --no-xinerama $wall1
         else
-            xwallpaper --$WallOptions $wall1  && sed -i "s|xwallpaper.*|xwallpaper  --$WallOptions $wall1|" $HOME/.local/bin/defaultwallpaper.sh
-            fi
+            xwallpaper --$WallOptions $wall1 && sed -i "s|xwallpaper.*|xwallpaper  --$WallOptions $wall1|" "$HOME/.local/bin/defaultwallpaper.sh"
+        fi
     fi
 
-    [ "$WithPywall" = "True" ] && wal -i $wall1 -nq && xsetroot -name "fsignal:1"
+    [ "$WithPywall" = "True" ] && wal -i "$wall1" -nq -o "$HOME/.config/wal/postrun"
 
     if [ "$WithBetterlockscreen" = "True" ]; then
         dunstify "Wall-d" "$startMessage"
-        betterlockscreen -u $wall1 -r $Resolution1
+        betterlockscreen -u "$wall1" -r "$Resolution1"
         dunstify "Wall-d" "$finishMessage"
     fi
 }
@@ -172,39 +166,33 @@ Single(){
 # to set to diffrent wallpapers on each desktop
 Dual() {
     if [ "$randomly" = "True" ]; then
-        dwalls=$(du -a $DIR | grep 'jpg\|jpeg\|png\|gif' | shuf -n 1 | awk '{print $2}')
+        dwalls=$(du -a "$DIR" | grep 'jpg\|jpeg\|png\|gif' | shuf -n 1 | awk '{print $2}')
     else
-        dwalls=$(nsxiv -t -o -b -g $location $DIR | xargs)  # running nsxiv in thimbnail mode.
+        dwalls=$(nsxiv -t -o -b -g "$location" "$DIR" | xargs) # running nsxiv in thimbnail mode.
     fi
     dwallslast2=$(printf "%s" "$dwalls" | awk '{w = 2; for (--w; w >=0; w--){printf "%s\t",$(NF-w)}print ""}') # Only print the two last marked Wallpapers
-    dwall1=$(printf "%s" "$dwallslast2" | awk '{print $1}')  # Print the path to the before-last marked wallpaper
-    dwall2=$(printf "%s" "$dwallslast2" | awk '{print $2}')  # Print the path to the last marked wallpaper
-	echo "$dwall1 ----- $dwall2"
+    dwall1=$(printf "%s" "$dwallslast2" | awk '{print $1}')                                                    # Print the path to the before-last marked wallpaper
+    dwall2=$(printf "%s" "$dwallslast2" | awk '{print $2}')                                                    # Print the path to the last marked wallpaper
 
     # if no picture is marked in nsxiv, exit.
     [ -z "$dwalls" ] && exit 0
 
-	if [ "$ShowOptions" = "True" ];
-	then
-		if [ "$UseRofi" = "True" ] && [ "$UseFeh" = "True" ];
-		then
-						WallMenu="rofi -dmenu -i -l 5 -p "Options""
-						WallOptions=$(echo -e "fill\ncenter\ntile\nscale" | $WallMenu)
-		elif [ "$UseRofi" = "True" ] && [ "$UseFeh" = "False" ];
-		then
-						WallMenu="rofi -dmenu -i -l 5 -p "Options""
-						WallOptions=$(echo -e "zoom\ncenter\ntile\nstretch\nno-randr" | $WallMenu)
-		elif [ "$UseRofi" = "False" ] && [ "$UseFeh" = "True" ];
-		then
-						WallMenu="dmenu $colorOptions -i -l 5 -p "Options""
-						WallOptions=$(echo -e "fill\ncenter\ntile\nscale" | $WallMenu)
-		else
-						WallMenu="dmenu $colorOptions -i -l 5 -p "Options""
-						WallOptions=$(echo -e "zoom\ncenter\ntile\nstretch\nno-randr" | $WallMenu)
-		fi
+    if [ "$ShowOptions" = "True" ]; then
+        if [ "$UseRofi" = "True" ] && [ "$UseFeh" = "True" ]; then
+            WallMenu="rofi -dmenu -i -l 5 -p Options"
+            WallOptions=$(echo -e "fill\ncenter\ntile\nscale" | $WallMenu)
+        elif [ "$UseRofi" = "True" ] && [ "$UseFeh" = "False" ]; then
+            WallMenu="rofi -dmenu -i -l 5 -p Options"
+            WallOptions=$(echo -e "zoom\ncenter\ntile\nstretch\nno-randr" | $WallMenu)
+        elif [ "$UseRofi" = "False" ] && [ "$UseFeh" = "True" ]; then
+            WallMenu="dmenu $colorOptions -i -l 5 -p Options"
+            WallOptions=$(echo -e "fill\ncenter\ntile\nscale" | $WallMenu)
+        else
+            WallMenu="dmenu $colorOptions -i -l 5 -p Options"
+            WallOptions=$(echo -e "zoom\ncenter\ntile\nstretch\nno-randr" | $WallMenu)
+        fi
     else
-        if [ "$UseFeh" = "True" ];
-        then
+        if [ "$UseFeh" = "True" ]; then
             WallOptions="scale"
         else
             WallOptions="stretch"
@@ -213,18 +201,17 @@ Dual() {
 
     [ -z "$WallOptions" ] && exit 0
 
-    if [ "$UseFeh" = "True" ];
-            then
-                feh --bg-$WallOptions $dwall1 $dwall2
-            else
-                xwallpaper --output $Monitor1 --$WallOptions $dwall1 --output $Monitor2 --$WallOptions $dwall2 && sed -i "s|xwallpaper.*|xwallpaper --output $Monitor1 --$WallOptions $dwall1 --output $Monitor2 --$WallOptions $dwall2|" $HOME/.local/bin/defaultwallpaper.sh
+    if [ "$UseFeh" = "True" ]; then
+        feh --bg-$WallOptions $dwall1 $dwall2
+    else
+        xwallpaper --output $Monitor1 --$WallOptions $dwall1 --output $Monitor2 --$WallOptions $dwall2 && sed -i "s|xwallpaper.*|xwallpaper --output $Monitor1 --$WallOptions $dwall1 --output $Monitor2 --$WallOptions $dwall2|" "$HOME/.local/bin/defaultwallpaper.sh"
     fi
 
-	[ "$WithPywall" = "True" ] && wal -i $dwall1 -nq && xsetroot -name "fsignal:1"
+    [ "$WithPywall" = "True" ] && wal -i "$dwall1" -nq -o "$HOME/.config/wal/postrun"
 
     if [ "$WithBetterlockscreen" = "True" ]; then
         dunstify "Wall-d" "$startMessage"
-        betterlockscreen -u $dwall1 -r $Resolution1
+        betterlockscreen -u "$dwall1" -r "$Resolution1"
         dunstify "Wall-d" "$finishMessage"
     fi
 }
@@ -232,62 +219,55 @@ Dual() {
 Triple() {
 
     if [ "$randomly" = "True" ]; then
-        twalls=$(du -a $DIR | grep 'jpg\|jpeg\|png\|gif' | shuf -n 1 | awk '{print $2}')
+        twalls=$(du -a "$DIR" | grep 'jpg\|jpeg\|png\|gif' | shuf -n 1 | awk '{print $2}')
     else
-        twalls=$(nsxiv -t -o -r -g $location $DIR | xargs)  # running nsxiv in thimbnail mode.
+        twalls=$(nsxiv -t -o -r -g "$location" "$DIR" | xargs) # running nsxiv in thimbnail mode.
     fi
     twallslast3=$(printf "%s" "$twalls" | awk '{w = 3; for (--w; w >=0; w--){printf "%s\t",$(NF-w)}print ""}') # Only print the three last marked Wallpapers
-    twall1=$(printf "%s" "$twallslast3" | awk '{print $1}')  # Print the path to the before-before-last marked wallpaper
-    twall2=$(printf "%s" "$twallslast3" | awk '{print $2}')  # Print the path to the before-last marked wallpaper
-    twall3=$(printf "%s" "$twallslast3" | awk '{print $3}')  # Print the path to the last marked wallpaper
+    twall1=$(printf "%s" "$twallslast3" | awk '{print $1}')                                                    # Print the path to the before-before-last marked wallpaper
+    twall2=$(printf "%s" "$twallslast3" | awk '{print $2}')                                                    # Print the path to the before-last marked wallpaper
+    twall3=$(printf "%s" "$twallslast3" | awk '{print $3}')                                                    # Print the path to the last marked wallpaper
 
     # if no picture is marked in nsxiv, exit.
     [ -z "$twalls" ] && exit 0
 
-	if [ "$ShowOptions" = "True" ];
-	then
-		if [ "$UseRofi" = "True" ] && [ "$UseFeh" = "True" ];
-		then
-				WallMenu="rofi -dmenu -i -l 5 -p "Options""
-				WallOptions=$(echo -e "fill\ncenter\ntile\nscale" | $WallMenu)
-		elif [ "$UseRofi" = "True" ] && [ "$UseFeh" = "False" ];
-		then
-				WallMenu="rofi -dmenu -i -l 5 -p "Options""
-				WallOptions=$(echo -e "zoom\ncenter\ntile\nstretch\nno-randr" | $WallMenu)
-		elif [ "$UseRofi" = "False" ] && [ "$UseFeh" = "True" ];
-		then
-				WallMenu="dmenu $colorOptions -i -l 5 -p "Options""
-				WallOptions=$(echo -e "fill\ncenter\ntile\nscale" | $WallMenu)
-		else
-				WallMenu="dmenu $colorOptions -i -l 5 -p "Options""
-				WallOptions=$(echo -e "zoom\ncenter\ntile\nstretch\nno-randr" | $WallMenu)
-		fi
+    if [ "$ShowOptions" = "True" ]; then
+        if [ "$UseRofi" = "True" ] && [ "$UseFeh" = "True" ]; then
+            WallMenu="rofi -dmenu -i -l 5 -p Options"
+            WallOptions=$(echo -e "fill\ncenter\ntile\nscale" | $WallMenu)
+        elif [ "$UseRofi" = "True" ] && [ "$UseFeh" = "False" ]; then
+            WallMenu="rofi -dmenu -i -l 5 -p Options"
+            WallOptions=$(echo -e "zoom\ncenter\ntile\nstretch\nno-randr" | $WallMenu)
+        elif [ "$UseRofi" = "False" ] && [ "$UseFeh" = "True" ]; then
+            WallMenu="dmenu $colorOptions -i -l 5 -p Options"
+            WallOptions=$(echo -e "fill\ncenter\ntile\nscale" | $WallMenu)
+        else
+            WallMenu="dmenu $colorOptions -i -l 5 -p Options"
+            WallOptions=$(echo -e "zoom\ncenter\ntile\nstretch\nno-randr" | $WallMenu)
+        fi
 
-		[ -z "$WallOptions" ] && exit 0
+        [ -z "$WallOptions" ] && exit 0
 
-		if [ "$UseFeh" = "True" ];
-				then
-						feh --bg-$WallOptions $dwall1 $dwall2
-				else
-						xwallpaper --output $Monitor1 --$WallOptions $twall1 --output $Monitor2 --$WallOptions $twall2 --output $Monitor3 --$WallOptions $twall3 && sed -i "s|xwallpaper.*|xwallpaper --output $Monitor1 --$WallOptions $twall1 --output $Monitor2 --$WallOptions $twall2 --output $Monitor3 --$WallOptions $twall3 |" $HOME/.local/bin/defaultwallpaper.sh
-		fi
-	fi
+        if [ "$UseFeh" = "True" ]; then
+            feh --bg-$WallOptions $dwall1 $dwall2
+        else
+            xwallpaper --output $Monitor1 --$WallOptions $twall1 --output $Monitor2 --$WallOptions $twall2 --output $Monitor3 --$WallOptions $twall3 && sed -i "s|xwallpaper.*|xwallpaper --output $Monitor1 --$WallOptions $twall1 --output $Monitor2 --$WallOptions $twall2 --output $Monitor3 --$WallOptions $twall3 |" "$HOME/.local/bin/defaultwallpaper.sh"
+        fi
+    fi
 
-    [ "$WithPywall" = "True" ] && wal -i $twall2 -nq && xsetroot -name "fsignal:1"
-
+    [ "$WithPywall" = "True" ] && wal -i "$twall2" -nq -o "$HOME/.config/wal/postrun"
 
     if [ "$WithBetterlockscreen" = "True" ]; then
         dunstify "Wall-d" "$startMessage"
-        betterlockscreen -u $twall2 -r $Resolution2
+        betterlockscreen -u "$twall2" -r "$Resolution2"
         dunstify "Wall-d" "$finishMessage"
     fi
 }
 
-if [ "$UseRofi" = "True" ];
-then
-		MENU="rofi -dmenu -l 3 -p "Mode?""
+if [ "$UseRofi" = "True" ]; then
+    MENU="rofi -dmenu -l 3 -p Mode?"
 else
-		MENU="dmenu $colorOptions -l 3 -p "Mode?""
+    MENU="dmenu $colorOptions -l 3 -p Mode?"
 fi
 
 if [ "$NumOfMonitors" -eq 1 ]; then
@@ -298,8 +278,8 @@ elif [ "$NumOfMonitors" -ge 3 ]; then
     MODE=$(echo -e "Single: Choose One Wallpaper\nDual: Choose Two Wallpapers\nTriple: Choose Three Wallpapers" | $MENU)
 fi
 
-  case "$MODE" in
-    Single*) Single ;;
-    Dual*) Dual ;;
-    Triple*) Triple
-  esac
+case "$MODE" in
+Single*) Single ;;
+Dual*) Dual ;;
+Triple*) Triple ;;
+esac
