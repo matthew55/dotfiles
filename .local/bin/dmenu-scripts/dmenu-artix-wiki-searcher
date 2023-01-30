@@ -10,7 +10,7 @@ choice=$(find $artix_path -iname *.pdf |
 cut -d "/" -f6- |
 sed -e "s/.pdf//g" -e "s/_/ /g" |
 sort |
-dmenu -i -l 20 -p "Which wiki?") || exit 1
+dmenu l 20 -p "Which wiki?") || exit 1
 
 if [ "$choice" ]; then
     choice_path=$(echo ${artix_path}${choice}.pdf | sed "s/ /_/g")

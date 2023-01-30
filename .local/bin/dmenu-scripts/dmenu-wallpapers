@@ -8,7 +8,7 @@ path=$HOME/Desktop/pictures/desktop-backgrounds/ && cd $path
 
 choice=$(ls | 
     sort |
-    dmenu -i -l 20 -p "Which File?") || exit 1
+    dmenu -l 20 -p "Which File?") || exit 1
 
 choice_path=$path$choice
 

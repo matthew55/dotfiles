@@ -8,7 +8,7 @@ config=$HOME/.config/ && cd $config
 
 choice=$(ls | 
     sort |
-    dmenu -i -l 20 -p "Which File / Directory?") || exit 1
+    dmenu -l 20 -p "Which File / Directory?") || exit 1
 
 choice_path=$config$choice
 
