@@ -65,9 +65,10 @@ export VIEB_WINDOW_FRAME="true"
 export _JAVA_AWT_WM_NONREPARENTING=1
 # Prevent ranger from loading default config.
 export RANGER_LOAD_DEFAULT_RC="false"
-# Qt5ct environmental variable
-export QT_QPA_PLATFORMTHEME="qt5ct"
-export MOZ_WEBRENDER=1
+# Gtk2 theme for QT environmental
+export QT_QPA_PLATFORMTHEME="gtk2"
+# Set password prompt
+export SUDO_ASKPASS="$HOME/.local/bin/dmenu-scripts/dmenu-pass"
 
 # Start graphical server on login if not already running.
 [ "$(tty)" = "/dev/tty1" ] && ! pidof -s Xorg >/dev/null 2>&1 && startx "$XINITRC"
