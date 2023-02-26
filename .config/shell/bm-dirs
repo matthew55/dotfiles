@@ -1,0 +1,35 @@
+# You can add comments to these files with #
+cac     ${XDG_CACHE_HOME:-$HOME/.cache}
+cf      ${XDG_CONFIG_HOME:-$HOME/.config}
+d       ${XDG_DESKTOP_DIR:-$HOME/Desktop}
+D       ${XDG_DOWNLOAD_DIR:-$HOME/Downloads}
+do      ${XDG_DOCUMENTS_DIR:-$HOME/Documents}
+dt      ${XDG_DATA_HOME:-$HOME/.local/share}
+h       $HOME
+m       ${XDG_MUSIC_DIR:-$HOME/Music}
+mn      /mnt
+mnu     /mnt/universal-files
+mnur    /mnt/universal-files/recording-archive
+p       ${XDG_PICTURES_DIR:-$HOME/Pictures}
+sc      $HOME/.local/bin
+scs     $HOME/.local/bin/statusbar
+scd     $HOME/.local/bin/dmenu-scripts
+src     $HOME/.local/src
+vv      ${XDG_VIDEOS_DIR:-$HOME/Videos}
+# My many programming directories
+cdg     ${XDG_DESKTOP_DIR:-$HOME/Desktop}/coding-stuff
+cdgb    ${XDG_DESKTOP_DIR:-$HOME/Desktop}/coding-stuff/bash
+cdgc    ${XDG_DESKTOP_DIR:-$HOME/Desktop}/coding-stuff/c
+cdgcp   ${XDG_DESKTOP_DIR:-$HOME/Desktop}/coding-stuff/c++
+cdgcs   ${XDG_DESKTOP_DIR:-$HOME/Desktop}/coding-stuff/c#
+cdgj    ${XDG_DESKTOP_DIR:-$HOME/Desktop}/coding-stuff/java
+cdgjs   ${XDG_DESKTOP_DIR:-$HOME/Desktop}/coding-stuff/javascript
+cdgp    ${XDG_DESKTOP_DIR:-$HOME/Desktop}/coding-stuff/python
+cdgr    ${XDG_DESKTOP_DIR:-$HOME/Desktop}/coding-stuff/ruby
+cdgg    ${XDG_DESKTOP_DIR:-$HOME/Desktop}/coding-stuff/github
+cdggc   ${XDG_DESKTOP_DIR:-$HOME/Desktop}/coding-stuff/github/clones
+cdggcc  ${XDG_DESKTOP_DIR:-$HOME/Desktop}/coding-stuff/github/clones/c
+cdggcj  ${XDG_DESKTOP_DIR:-$HOME/Desktop}/coding-stuff/github/clones/java
+cdggcp  ${XDG_DESKTOP_DIR:-$HOME/Desktop}/coding-stuff/github/clones/pythong
+cdggcr  ${XDG_DESKTOP_DIR:-$HOME/Desktop}/coding-stuff/github/clones/rust
+cdggcw  ${XDG_DESKTOP_DIR:-$HOME/Desktop}/coding-stuff/github/clones/web-de

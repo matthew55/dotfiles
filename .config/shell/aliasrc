@@ -3,11 +3,14 @@
 # Use $XINITRC variable if file exists.
 [ -f "$XINITRC" ] && alias startx="startx $XINITRC"
 
+# Open script file selected with fzf.
+# Useage: se
 se() {
 	choice="$(find ~/.local/bin -mindepth 1 -printf '%P\n' | fzf)"
 	[ -f "$HOME/.local/bin/$choice" ] && $EDITOR "$HOME/.local/bin/$choice"
 }
 
+# Extract almost every imaginable compressed file type.
 # Usage: ex <file>
 ex ()
 {
@@ -34,7 +37,8 @@ ex ()
   fi
 }
 
-# useage: mkcd <directory>
+# Cd into directory just created.
+# Useage: mkcd <directory>
 mkcd ()
 {
 	[ -n $1 ] && mkdir $1 && cd $1 || echo "'$1' cannot be made"
@@ -69,35 +73,41 @@ alias \
     pacman="pacman --color=auto" \
 	cat="lolcat -f"
 
+# Aliases
 alias \
+    ..="cd .." \
+    cleanup="sudo pacman -Rncs $(pacman -Qtdq)" \
+    cmatrix="cmatrix -a -u 3" \
+    gpg-check="gpg2 --keyserver-options auto-key-retrieve --verify" \
+    gpg-retrieve="gpg2 --keyserver-options auto-key-retrieve --receive-keys" \
 	la="ls -A" \
 	ll="ls -l" \
 	lal="ls -lA" \
 	lf="lfub" \
-    cmatrix="cmatrix -a -u 3" \
+    maven="mvn" \
+	py="python" \
+	sxiv="nsxiv" \
+	sys="systemctl" \
     xclip="xclip -selection clipboard" \
 	yarn="yarn --use-yarnrc ${XDG_CONFIG_HOME:-$HOME/.config}/yarn/config" \
-	sxiv="nsxiv" \
-	py="python" \
-    maven="mvn" \
-    gradle.bat="gradle" \
-    gradlew="gradle" \
-    gradlew.bat="gradle" \
-    speedtest.net="speedtest" \
+
+# Run Scripts
+alias \
     mirror="sudo reflector -f 30 -l 30 --number 10 --verbose --save /etc/pacman.d/mirrorlist" \
     mirrord="sudo reflector --latest 50 --number 20 --sort delay --save /etc/pacman.d/mirrorlist" \
     mirrors="sudo reflector --latest 50 --number 20 --sort score --save /etc/pacman.d/mirrorlist" \
     mirrora="sudo reflector --latest 50 --number 20 --sort age --save /etc/pacman.d/mirrorlist" \
-    cleanup="sudo pacman -Rncs $(pacman -Qtdq)" \
-    gpg-check="gpg2 --keyserver-options auto-key-retrieve --verify" \
-    gpg-retrieve="gpg2 --keyserver-options auto-key-retrieve --receive-keys" \
+	ref="shortcuts >/dev/null; source ${XDG_CONFIG_HOME:-$HOME/.config}/shell/shortcutrc" \
+
+# Curl
+alias \
     myip="curl ifconfig.co" \
     rr="curl -s -L http://bit.ly/10hA8iC | bash" \
     weather="curl wttr.in" 
 
 # Github Aliases
- alias \
-    addup="git add -u" \
+alias \
+	addup="git add -u" \
     addall="git add ." \
     branch="git branch" \
     checkout="git checkout" \
@@ -111,36 +121,4 @@ alias \
     tag="git tag" \
     newtag="git tag -a" \
     config="git --git-dir=$HOME/Desktop/coding-stuff/github/matthew55/dotfiles/ --work-tree=$HOME"
-
-# My many programing directories.
-alias \
-	coding="cd ~/Desktop/coding-stuff" \
-	codingb="cd ~/Desktop/coding-stuff/bash" \
-	codingc="cd ~/Desktop/coding-stuff/c" \
-	codingcp="cd ~/Desktop/coding-stuff/c++" \
-	codingcs="cd ~/Desktop/coding-stuff/c#" \
-	codingj="cd ~/Desktop/coding-stuff/java" \
-	codingjs="cd ~/Desktop/coding-stuff/javascript" \
-	codingp="cd ~/Desktop/coding-stuff/python"\
-	codingr="cd ~/Desktop/coding-stuff/ruby"\
-	codingg="cd ~/Desktop/coding-stuff/github" \
-	codinggc="cd ~/Desktop/coding-stuff/github/clones" \
-	codinggcc="cd ~/Desktop/coding-stuff/github/clones/c" \
-	codinggcj="cd ~/Desktop/coding-stuff/github/clones/java" \
-	codinggcp="cd ~/Desktop/coding-stuff/github/clones/pythong" \
-	codinggcr="cd ~/Desktop/coding-stuff/github/clones/rust" \
-	codinggcw="cd ~/Desktop/coding-stuff/github/clones/web-dev"
-
-# My misc directories.
-alias \
-    ..="cd .." \
-	d="cd ~/Desktop" \
-	p="cd ~/Pictures" \
-	cf="cd ~/.config" \
-    sb="cd ~/.local/bin/" \
-    sbs="cd ~/.local/bin/statusbar" \
-    sbd="cd ~/.local/bin/dmenu-scripts" \
-	mnt="cd /mnt" \
-	mntu="cd /mnt/universal-files" \
-	mntur="cd /mnt/universal-files/recording-archive"
 
