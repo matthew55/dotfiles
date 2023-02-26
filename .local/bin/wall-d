@@ -47,8 +47,9 @@ UseRofi="False"
 # function to reset the last set wallpaper(s)
 restore() {
     lastwall="$(cat "$HOME/.local/bin/lastwallpaper")"
-    if [ -f "$lastwall" ] && [ "${lastwall//*\./}" = "gif" ]; then
-        xwinwrap -ov -ni -fs -- mpv --mute=yes --no-audio --no-osc --msg-level=all=no -wid WID --keepaspect=no --loop "$lastwall" &
+    extension="${lastwall//*\./}"
+    if [ -f "$lastwall" ] && [ $extension = "gif" ]; then
+        xwinwrap -ov -ni -fs -- mpv --mute=yes --no-audio --no-osc --msg-level=all=no -wid WID --keepaspect=no --loop $lastwall &
     elif [ "$UseFeh" = "True" ]; then
         "$HOME/.fehbg" &
     else
@@ -142,8 +143,8 @@ Single() {
     echo "$wall1" >"$HOME/.local/bin/lastwallpaper"
 
     Wall1Extension="${wall1//*\./}"
-    if [ "$Wall1Extension" = "gif" ] || [ "$Wall1Extension" = "mp4" ] && [ "$ShowOptions" = "False" ]; then
-        xwinwrap -ov -ni -fs -- mpv --mute=yes --no-audio --no-osc --msg-level=all=no -wid WID --keepaspect=no --loop "$wall1" &
+    if [ $Wall1Extension = "gif" ] || [ $Wall1Extension = "mp4" ] && [ "$ShowOptions" = "False" ]; then
+        xwinwrap -ov -ni -fs -- mpv --mute=yes --no-audio --no-osc --msg-level=all=no -wid WID --keepaspect=no --loop $wall1 &
     elif [ "$OnlyBetterlockscreen" = "True" ]; then
         betterlockscreen -u "$wall1" -r "$Resolution1"
     else
@@ -154,7 +155,7 @@ Single() {
         fi
     fi
 
-    [ "$WithPywall" = "True" ] && wal -i "$wall1" -nq -o "$HOME/.config/wal/postrun"
+    [ "$WithPywall" = "True" ] && wal -i $wall1 -nq -o "$HOME/.config/wal/postrun"
 
     if [ "$WithBetterlockscreen" = "True" ]; then
         dunstify "Wall-d" "$startMessage"
@@ -201,13 +202,16 @@ Dual() {
 
     [ -z "$WallOptions" ] && exit 0
 
+    # Kill animated wallpapers before setting next wallpaper
+    killall -q xwinwrap >/dev/null
+
     if [ "$UseFeh" = "True" ]; then
         feh --bg-$WallOptions $dwall1 $dwall2
     else
         xwallpaper --output $Monitor1 --$WallOptions $dwall1 --output $Monitor2 --$WallOptions $dwall2 && sed -i "s|xwallpaper.*|xwallpaper --output $Monitor1 --$WallOptions $dwall1 --output $Monitor2 --$WallOptions $dwall2|" "$HOME/.local/bin/defaultwallpaper.sh"
     fi
 
-    [ "$WithPywall" = "True" ] && wal -i "$dwall1" -nq -o "$HOME/.config/wal/postrun"
+    [ "$WithPywall" = "True" ] && wal -i $dwall1 -nq -o "$HOME/.config/wal/postrun"
 
     if [ "$WithBetterlockscreen" = "True" ]; then
         dunstify "Wall-d" "$startMessage"
@@ -255,7 +259,7 @@ Triple() {
         fi
     fi
 
-    [ "$WithPywall" = "True" ] && wal -i "$twall2" -nq -o "$HOME/.config/wal/postrun"
+    [ "$WithPywall" = "True" ] && wal -i $twall2 -nq -o "$HOME/.config/wal/postrun"
 
     if [ "$WithBetterlockscreen" = "True" ]; then
         dunstify "Wall-d" "$startMessage"
