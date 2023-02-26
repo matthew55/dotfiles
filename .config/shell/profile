@@ -69,6 +69,10 @@ export RANGER_LOAD_DEFAULT_RC="false"
 export QT_QPA_PLATFORMTHEME="gtk2"
 # Set password prompt
 export SUDO_ASKPASS="$HOME/.local/bin/dmenu-scripts/dmenu-pass"
+# Set FZF settings
+label=$(echo "Chose a file or directory" | lolcat -f)
+export FZF_DEFAULT_OPTS="--border --border-label='╢ $label ╟' --color=label:italic:black --layout=reverse --height 40%"
+export FZF_DEFAULT_COMMAND="fd --type f" # Quicker sorting algorithm
 
 # Start graphical server on login if not already running.
 [ "$(tty)" = "/dev/tty1" ] && ! pidof -s Xorg >/dev/null 2>&1 && startx "$XINITRC"

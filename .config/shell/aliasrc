@@ -3,6 +3,11 @@
 # Use $XINITRC variable if file exists.
 [ -f "$XINITRC" ] && alias startx="startx $XINITRC"
 
+se() {
+	choice="$(find ~/.local/bin -mindepth 1 -printf '%P\n' | fzf)"
+	[ -f "$HOME/.local/bin/$choice" ] && $EDITOR "$HOME/.local/bin/$choice"
+}
+
 # Usage: ex <file>
 ex ()
 {
@@ -32,7 +37,7 @@ ex ()
 # useage: mkcd <directory>
 mkcd ()
 {
-	[ ! -z $1 ] && mkdir $1 && cd $1 || echo "'$1' cannot be made"
+	[ -n $1 ] && mkdir $1 && cd $1 || echo "'$1' cannot be made"
 }
 
 # sudo not required for some system commands.
@@ -61,12 +66,14 @@ alias \
 	diff="diff --color=auto" \
 	ip="ip -color=auto" \
     yay="yay --color=auto" \
-    pacman="pacman --color=auto"
+    pacman="pacman --color=auto" \
+	cat="lolcat -f"
 
 alias \
 	la="ls -A" \
 	ll="ls -l" \
 	lal="ls -lA" \
+	lf="lfub" \
     cmatrix="cmatrix -a -u 3" \
     xclip="xclip -selection clipboard" \
 	yarn="yarn --use-yarnrc ${XDG_CONFIG_HOME:-$HOME/.config}/yarn/config" \
