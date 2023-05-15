@@ -10,6 +10,7 @@ fi
 autoload -Uz compinit
 
 # ~/ Clean-up:
+export XDG_SHARED_DIR="/home/shared"
 export XDG_VIDEOS_DIR="$HOME/Videos"
 export XDG_PICTURES_DIR="$HOME/Pictures"
 export XDG_DOCUMENTS_DIR="$HOME/Documents"
@@ -44,7 +45,7 @@ export _JAVA_OPTIONS=-Djava.util.prefs.userRoot="$XDG_CONFIG_HOME"/java
 export NPM_CONFIG_USERCONFIG="$XDG_CONFIG_HOME/npm/npmrc"
 export VSCODE_PORTABLE="$XDG_DATA_HOME/vscode"
 export FEHBG_PATH="$XDG_CONFIG_HOME/feh/fehbg" # https://github.com/derf/feh/pull/668
-export GEM_HOME="$(ruby -e 'puts Gem.user_dir')"
+#export GEM_HOME="$(ruby -e 'puts Gem.user_dir')"
 export SOLARGRAPH_CACHE=$XDG_CACHE_HOME/solargraph 
 
 # Paths
@@ -60,19 +61,19 @@ export PATH="$PATH:$GEM_HOME/bin"
 # Get proper colors.
 export TERM="xterm-256color"
 # Set default text editor.
-export EDITOR="vim"
+export EDITOR="nvim"
 # Set default terminal.
 export TERMINAL="st"
 # Set default browser.
-export BROWSER="firefox"
+export BROWSER="librewolf"
 # Fix window-frames in vieb browser.
 export VIEB_WINDOW_FRAME="true"
 # Fix white screen of death in Java AWT programs.
 export _JAVA_AWT_WM_NONREPARENTING=1
 # Prevent ranger from loading default config.
 export RANGER_LOAD_DEFAULT_RC="false"
-# Gtk2 theme for QT environmental
-export QT_QPA_PLATFORMTHEME="gtk2"
+# Gtk3 theme for QT environmental
+export QT_QPA_PLATFORMTHEME="gtk3"
 # Set password prompt
 export SUDO_ASKPASS="$HOME/.local/bin/dmenu-scripts/dmenu-pass"
 # Set FZF settings
