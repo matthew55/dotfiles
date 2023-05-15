@@ -2,7 +2,7 @@
 # Opens a directory or file in the ~/.config directory.
 # Assumes TERMINAL and EDITOR are defined.
 
-filemanager=ranger
+filemanager=lf
 
 config=$HOME/.config/ && cd $config
 
