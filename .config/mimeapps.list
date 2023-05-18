@@ -1,3 +1,9 @@
-
 [Default Applications]
 inode/directory=pcmanfm.desktop
+x-scheme-handler/mailto=userapp-Thunderbird-3WF441.desktop
+message/rfc822=userapp-Thunderbird-3WF441.desktop
+x-scheme-handler/mid=userapp-Thunderbird-3WF441.desktop
+
+[Added Associations]
+x-scheme-handler/mailto=userapp-Thunderbird-3WF441.desktop;
+x-scheme-handler/mid=userapp-Thunderbird-3WF441.desktop;
