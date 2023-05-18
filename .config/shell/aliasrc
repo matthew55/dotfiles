@@ -1,7 +1,12 @@
 #!/usr/bin/env bash
 
+# Use neovim for vim if present.
+[ -x "$(command -v nvim)" ] && alias vim="nvim" vimdiff="nvim -d"
+
 # Use $XINITRC variable if file exists.
 [ -f "$XINITRC" ] && alias startx="startx $XINITRC"
+
+[ -f "$MBSYNCRC" ] && alias mbsync="mbsync -c $MBSYNCRC"
 
 # Open script file selected with fzf.
 # Useage: se
@@ -76,7 +81,6 @@ alias \
 # Aliases
 alias \
     ..="cd .." \
-	vim="nvim" \
     cleanup="sudo pacman -Rncs $(pacman -Qtdq)" \
     cmatrix="cmatrix -a -u 3" \
     gpg-check="gpg2 --keyserver-options auto-key-retrieve --verify" \
@@ -85,7 +89,8 @@ alias \
 	ll="ls -l" \
 	lal="ls -lA" \
 	lf="lfub" \
-    maven="mvn" \
+    mvn="mvn -gs $XDG_CONFIG_HOME/maven/settings.xml" \
+	maven="mvn" \
 	py="python" \
 	sxiv="nsxiv" \
 	sys="systemctl" \
