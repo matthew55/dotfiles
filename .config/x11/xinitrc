@@ -22,6 +22,9 @@ unclutter &
 # Setup notifications.
 dunst &
 
+# Start SSH Agent.
+eval "$(ssh-agent -s)" 2>/dev/null 
+
 # Changes caps to be escape
 setxkbmap -option caps:escape
 
