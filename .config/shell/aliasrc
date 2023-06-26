@@ -126,5 +126,5 @@ alias \
     status="git status" \
     tag="git tag" \
     newtag="git tag -a" \
-    config="git --git-dir=${XDG_SHARED_DIR:-/home/shared}/coding-stuff/github/matthew55/dotfiles/ --work-tree=$HOME"
+    config="git --git-dir=${XDG_DESKTOP_DIR:-$HOME/Desktop}/coding-stuff/github/matthew55/dotfiles/ --work-tree=$HOME"
 
