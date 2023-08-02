@@ -25,8 +25,12 @@ dunst &
 # Start SSH Agent.
 eval "$(ssh-agent -s)" 2>/dev/null 
 
-# Changes caps to be escape
-setxkbmap -option caps:escape
+# Start blueman-applet
+blueman-applet &
+
+# Do all of our key remapping
+#remapd
+remaps
 
 # Load Xresources and redirect xrdb to PyWal's Xresource's file.
 #[[ -f ${XDG_CONFIG_HOME:-$HOME/.config}/x11/.Xresources ]] && xrdb -merge -I$HOME ${XDG_CONFIG_HOME:-$HOME/.config}/x11/.Xresources && xrdb -merge ${XDG_CACHE_HOME:-$HOME/.cache}/wal/colors.Xresources
