@@ -1,6 +1,7 @@
 # You can add comments to these files with #
 cac     ${XDG_CACHE_HOME:-$HOME/.cache}
 cf      ${XDG_CONFIG_HOME:-$HOME/.config}
+cfs     ${XDG_CONFIG_HOME:-$HOME/.config}/shell
 d       ${XDG_DESKTOP_DIR:-$HOME/Desktop}
 D       ${XDG_DOWNLOAD_DIR:-$HOME/Downloads}
 do      ${XDG_DOCUMENTS_DIR:-$HOME/Documents}
@@ -23,10 +24,14 @@ cdgc    ${XDG_SHARED_DIR:-/home/shared}/coding-stuff/c
 cdgcp   ${XDG_SHARED_DIR:-/home/shared}/coding-stuff/c++
 cdgcs   ${XDG_SHARED_DIR:-/home/shared}/coding-stuff/c#
 cdgj    ${XDG_SHARED_DIR:-/home/shared}/coding-stuff/java
+cdgjm   ${XDG_SHARED_DIR:-/home/shared}/coding-stuff/java/minecraft
+cdgjmp  ${XDG_SHARED_DIR:-/home/shared}/coding-stuff/java/minecraft/paper
+cdgjmf  ${XDG_SHARED_DIR:-/home/shared}/coding-stuff/java/minecraft/forge
 cdgjs   ${XDG_SHARED_DIR:-/home/shared}/coding-stuff/javascript
 cdgp    ${XDG_SHARED_DIR:-/home/shared}/coding-stuff/python
 cdgr    ${XDG_SHARED_DIR:-/home/shared}/coding-stuff/ruby
 cdgg    ${XDG_SHARED_DIR:-/home/shared}/coding-stuff/github
+cdggm   ${XDG_SHARED_DIR:-/home/shared}/coding-stuff/github/matthew55
 cdggc   ${XDG_SHARED_DIR:-/home/shared}/coding-stuff/github/clones
 cdggcc  ${XDG_SHARED_DIR:-/home/shared}/coding-stuff/github/clones/c
 cdggcj  ${XDG_SHARED_DIR:-/home/shared}/coding-stuff/github/clones/java
