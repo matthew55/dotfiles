@@ -3,6 +3,8 @@ inode/directory=pcmanfm.desktop
 x-scheme-handler/mailto=userapp-Thunderbird-3WF441.desktop
 message/rfc822=userapp-Thunderbird-3WF441.desktop
 x-scheme-handler/mid=userapp-Thunderbird-3WF441.desktop
+x-scheme-handler/discord-719038221807386665=discord-719038221807386665.desktop
+x-scheme-handler/discord-1145889949317615646=discord-1145889949317615646.desktop
 
 [Added Associations]
 x-scheme-handler/mailto=userapp-Thunderbird-3WF441.desktop;
