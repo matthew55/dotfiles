@@ -205,6 +205,12 @@ Plug 'tpope/vim-surround'
 Plug 'scrooloose/syntastic'
 Plug 'elzr/vim-json'
 Plug 'tpope/vim-fugitive'
+Plug 'ms-jpq/coq_nvim', {'branch': 'coq'}
+Plug 'ms-jpq/coq.artifacts', {'branch': 'artifacts'}
+Plug 'ms-jpq/coq.thirdparty', {'branch': '3p'}
+Plug 'nvim-telescope/telescope.nvim' " optional
+Plug 'nvim-treesitter/nvim-treesitter'
+Plug 'cuducos/yaml.nvim'
 
 call plug#end()
 "------------------------------------------------------------
