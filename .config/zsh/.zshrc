@@ -2,20 +2,20 @@
 # ~/.zshrc
 #
 
-HISTFILE=~/.bash_history
-HISTSIZE=1000
-SAVEHIST=1000
+HISTFILE="${XDG_CACHE_HOME:-$HOME/.cache}/zsh/history"
+HISTSIZE=1000000
+SAVEHIST=1000000
 
 # Load aliases and shortcuts if existent.
 [ -f "${XDG_CONFIG_HOME:-$HOME/.config}/shell/aliasrc" ] && source "${XDG_CONFIG_HOME:-$HOME/.config}/shell/aliasrc"
 [ -f "${XDG_CONFIG_HOME:-$HOME/.config}/shell/shortcutrc" ] && source "${XDG_CONFIG_HOME:-$HOME/.config}/shell/shortcutrc"
-#[ -f "${XDG_CONFIG_HOME:-$HOME/.config}/shell/zshnameddirrc" ] && source "${XDG_CONFIG_HOME:-$HOME/.config}/shell/zshnameddirrc"
 
 # Enable colors and change prompt:
 autoload -U colors && colors  # Load colors
 PS1="%B%{$fg[red]%}[%{$fg[yellow]%}%n%{$fg[green]%}@%{$fg[blue]%}%M %{$fg[magenta]%}%~%{$fg[red]%}]%{$reset_color%}$%b "
 setopt autocd # Automatically cd into typed directory.
 stty stop undef # Disable ctrl-s to freeze terminal.
+zle_highlight=('paste:none') # Disable pasted text being highlighted.
 setopt interactive_comments
 
 # Basic auto/tab complete
@@ -25,13 +25,16 @@ zmodload zsh/complist
 compinit
 _comp_options+=(globdots) # Include hidden files.
 
-# Bash insulter
-if [ -f /etc/bash.command-not-found ]; then
-    . /etc/bash.command-not-found
-fi
-
 # Enable VI mode.
 bindkey -v
+ 
+# Use VI keybinds for tab completion.
+bindkey -M menuselect 'h' vi-backward-char
+bindkey -M menuselect 'k' vi-up-line-or-history
+bindkey -M menuselect 'l' vi-forward-char
+bindkey -M menuselect 'j' vi-down-line-or-history
+bindkey -v '^?' backward-delete-char
+ 
 # Make backspace & delete work as you would expect them to.
 bindkey "^?" backward-delete-char
 bindkey "^[[P" delete-char
@@ -80,18 +83,12 @@ bindkey -s '^o' '^ulfcd\n'
 bindkey -s '^a' '^ubc -lq\n'
 
 bindkey -s '^f' '^ucd "$(dirname "$(fzf)")"\n'
-bindkey -s '^v' '^u$EDITOR "$(fzf)"\n'
+bindkey -s '^r' '^u$EDITOR "$(fzf)"\n'
 bindkey -s '^d' '^ucd "$(find . -type d -print 2>/dev/null | fzf)"\n'
 
-# Use VI keybinds for tab completion.
-zstyle ':completion:*' menu select
-zmodload zsh/complist
-
-# use the vi navigation keys in menu completion
-bindkey -M menuselect 'h' vi-backward-char
-bindkey -M menuselect 'k' vi-up-line-or-history
-bindkey -M menuselect 'l' vi-forward-char
-bindkey -M menuselect 'j' vi-down-line-or-history
-
-# Load syntax highlighting.
+# Plugins
+source /usr/share/zsh/plugins/zsh-autosuggestions/zsh-autosuggestions.plugin.zsh 2>/dev/null
+#source /usr/share/zsh/plugins/zsh-vi-mode/zsh-vi-mode.plugin.zsh 2>/dev/null
+# Load syntax highlighting; should be last.
+#source /usr/share/zsh/plugins/fast-syntax-highlighting/fast-syntax-highlighting.plugin.zsh 2>/dev/null
 source /usr/share/zsh/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.plugin.zsh 2>/dev/null
