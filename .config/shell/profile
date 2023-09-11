@@ -9,6 +9,12 @@ fi
 # Start compinit
 autoload -Uz compinit
 
+# Default programs:
+export EDITOR="nvim"
+export TERMINAL="st"
+export TERMINAL_PROG="st"
+export BROWSER="librewolf"
+
 # ~/ Clean-up:
 export XDG_SHARED_DIR="/home/shared"
 export XDG_VIDEOS_DIR="$HOME/Videos"
@@ -49,9 +55,7 @@ export FEHBG_PATH="$XDG_CONFIG_HOME/feh/fehbg" # https://github.com/derf/feh/pul
 export SOLARGRAPH_CACHE=$XDG_CACHE_HOME/solargraph 
 
 # Paths
-export PATH="$PATH:$HOME/.local/bin"
-export PATH="$PATH:$HOME/.local/bin/statusbar"
-export PATH="$PATH:$HOME/.local/bin/dmenu-scripts/"
+export PATH="$PATH:${$(find ~/.local/bin -type d -printf %p:)%%:}" # Adds `~/.local/bin` to $PATH
 export PATH="$PATH:$HOME/.local/share/gem/ruby/3.0.0/bin"
 export PATH="$PATH:$GEM_HOME/bin"
 
