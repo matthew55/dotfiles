@@ -2,6 +2,7 @@
 cac     ${XDG_CACHE_HOME:-$HOME/.cache}
 cf      ${XDG_CONFIG_HOME:-$HOME/.config}
 cfs     ${XDG_CONFIG_HOME:-$HOME/.config}/shell
+cfZ     $ZDOTDIR
 d       ${XDG_DESKTOP_DIR:-$HOME/Desktop}
 D       ${XDG_DOWNLOAD_DIR:-$HOME/Downloads}
 do      ${XDG_DOCUMENTS_DIR:-$HOME/Documents}
@@ -35,6 +36,6 @@ cdggm   ${XDG_SHARED_DIR:-/home/shared}/coding-stuff/github/matthew55
 cdggc   ${XDG_SHARED_DIR:-/home/shared}/coding-stuff/github/clones
 cdggcc  ${XDG_SHARED_DIR:-/home/shared}/coding-stuff/github/clones/c
 cdggcj  ${XDG_SHARED_DIR:-/home/shared}/coding-stuff/github/clones/java
-cdggcp  ${XDG_SHARED_DIR:-/home/shared}/coding-stuff/github/clones/pythong
+cdggcp  ${XDG_SHARED_DIR:-/home/shared}/coding-stuff/github/clones/python
 cdggcr  ${XDG_SHARED_DIR:-/home/shared}/coding-stuff/github/clones/rust
-cdggcw  ${XDG_SHARED_DIR:-/home/shared}/coding-stuff/github/clones/web-de
+cdggcw  ${XDG_SHARED_DIR:-/home/shared}/coding-stuff/github/clones/web-dev
