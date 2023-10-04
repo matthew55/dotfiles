@@ -13,7 +13,7 @@ dmenu -l 20 -p "Which wiki?") || exit 1
 
 if [ "$choice" ]; then
     choice_path=$(echo ${arch_path}${choice}.html | sed "s/ /_/g")
-    $BROWSER $choice_path
+	[ -a "$choice_path" ] && $BROWSER $choice_path
 else
     echo "Program Terminated." && exit 0
 fi
