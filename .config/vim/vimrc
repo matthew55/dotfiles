@@ -61,6 +61,9 @@ set hidden
 " Better command-line completion
 set wildmenu
 
+" Enable spell checking for the local buffer.
+setlocal spell spelllang=en_us
+
 " Show partial commands in the last line of the screen
 set showcmd
 
@@ -198,7 +201,7 @@ if !has('nvim') | set viminfofile=$XDG_STATE_HOME/vim/viminfo | endif
 
 "------------------------------------------------------------
 " Plugins {{{1
-call plug#begin('~/.vim/plugged/')
+call plug#begin('$XDG_CONFIG_HOME/vim/plugged/')
 
 Plug 'ap/vim-css-color'
 Plug 'tpope/vim-surround'
