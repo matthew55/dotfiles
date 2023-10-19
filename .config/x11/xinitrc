@@ -26,7 +26,7 @@ dunst & 2>/dev/null
 blueman-applet & 2>/dev/null
 
 # Start SSH Agent.
-eval "$(ssh-agent -s)" 2>/dev/null 
+#eval "$(ssh-agent -s)" 2>/dev/null 
 
 # Changes caps to be escape
 setxkbmap -option caps:escape
@@ -34,6 +34,9 @@ setxkbmap -option caps:escape
 # Load Xresources and redirect xrdb to PyWal's Xresource's file.
 #[[ -f ${XDG_CONFIG_HOME:-$HOME/.config}/x11/.Xresources ]] && xrdb -merge -I$HOME ${XDG_CONFIG_HOME:-$HOME/.config}/x11/.Xresources && xrdb -merge ${XDG_CACHE_HOME:-$HOME/.cache}/wal/colors.Xresources
 
-# Start our display manager
+# Start our status bar.
 dwmblocks &
-exec dwm
+
+# Activate dbus variables and start our display manager.
+dbus-update-activation-environment --all
+ssh-agent dwm
