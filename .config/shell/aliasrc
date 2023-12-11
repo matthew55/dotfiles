@@ -9,7 +9,7 @@
 [ -f "$MBSYNCRC" ] && alias mbsync="mbsync -c $MBSYNCRC"
 
 # Open script file selected with fzf.
-# Useage: se
+# Usage: se
 se() {
 	choice="$(find ~/.local/bin -mindepth 1 -printf '%P\n' | fzf)"
 	[ -f "$HOME/.local/bin/$choice" ] && $EDITOR "$HOME/.local/bin/$choice"
@@ -43,10 +43,31 @@ ex ()
 }
 
 # Cd into directory just created.
-# Useage: mkcd <directory>
+# Usage: mkcd <directory>
 mkcd ()
 {
 	[ -n $1 ] && mkdir $1 && cd $1 || echo "'$1' cannot be made"
+}
+
+# Copy files with rsync.
+# Usage: cpr </path/to/source> </path/to/destination>
+cpr() {
+  rsync --archive -hh --partial --info=stats1,progress2 --modify-window=1 "$@"
+} 
+
+# Move files with rsync.
+# Usage: mvr </path/to/source> </path/to/destination>
+mvr() {
+  rsync --archive -hh --partial --info=stats1,progress2 --modify-window=1 --remove-source-files "$@"
+}
+
+# Swap two names
+# Usage: mkcd <file 1> <file 2>
+swapfiles()
+{
+	tmp="$(mktemp)"
+	[ -f $1 ] && [ -f $2 ] && cat "$1" > "$tmp" && mv -f "$2" "$1" && mv -f "$tmp" "$2" || echo "'$1' cannot be switched with '$2'"
+	unset tmp
 }
 
 # sudo not required for some system commands.
