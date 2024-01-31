@@ -109,7 +109,7 @@ Single() {
     if [ "$randomly" = "True" ]; then
         walls=$(du -a "$DIR" | grep 'jpg\|jpeg\|png\|gif\|mp4' | shuf -n 1 | awk '{print $2}')
     else
-        walls=$(nsxiv -t -o -b -g "$location" "$DIR" | xargs) # running nsxiv in thumbnail mode.
+        walls=$(nsxiv -a -t -o -b -g "$location" "$DIR" | xargs) # running nsxiv in thumbnail mode.
     fi
     wall1=$(printf "%s" "$walls" | awk '{w = 1; for (--w; w >=0; w--){printf "%s\t",$(NF-w)}print ""}') # Only print the last marked Wallpaper
 
@@ -173,7 +173,7 @@ Dual() {
     if [ "$randomly" = "True" ]; then
         dwalls=$(du -a "$DIR" | grep 'jpg\|jpeg\|png\|gif' | shuf -n 1 | awk '{print $2}')
     else
-        dwalls=$(nsxiv -t -o -b -g "$location" "$DIR" | xargs) # running nsxiv in thimbnail mode.
+        dwalls=$(nsxiv -a -t -o -b -g "$location" "$DIR" | xargs) # running nsxiv in thimbnail mode.
     fi
     dwallslast2=$(printf "%s" "$dwalls" | awk '{w = 2; for (--w; w >=0; w--){printf "%s\t",$(NF-w)}print ""}') # Only print the two last marked Wallpapers
     dwall1=$(printf "%s" "$dwallslast2" | awk '{print $1}')                                                    # Print the path to the before-last marked wallpaper
@@ -238,7 +238,7 @@ Triple() {
     if [ "$randomly" = "True" ]; then
         twalls=$(du -a "$DIR" | grep 'jpg\|jpeg\|png\|gif' | shuf -n 1 | awk '{print $2}')
     else
-        twalls=$(nsxiv -t -o -r -g "$location" "$DIR" | xargs) # running nsxiv in thimbnail mode.
+        twalls=$(nsxiv -a -t -o -r -g "$location" "$DIR" | xargs) # running nsxiv in thimbnail mode.
     fi
     twallslast3=$(printf "%s" "$twalls" | awk '{w = 3; for (--w; w >=0; w--){printf "%s\t",$(NF-w)}print ""}') # Only print the three last marked Wallpapers
     twall1=$(printf "%s" "$twallslast3" | awk '{print $1}')                                                    # Print the path to the before-before-last marked wallpaper

@@ -114,7 +114,8 @@ alias \
 	maven="mvn" \
 	py="python" \
 	speedtest="speedtest --secure" \
-	sxiv="nsxiv" \
+	sxiv="nsxiv -a" \
+	nsxiv="nsxiv -a" \
 	sys="systemctl" \
     xclip="xclip -selection clipboard" \
 	yarn="yarn --use-yarnrc ${XDG_CONFIG_HOME:-$HOME/.config}/yarn/config" \
