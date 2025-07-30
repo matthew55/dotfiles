@@ -98,7 +98,7 @@ get_wall_option() {
             echo -e "$opts" | dmenu $COLOR_OPTIONS -l 5 -p Options
         fi
     else
-        [[ "$feh" == "True" ]] && echo "fill" || echo "stretch"
+        [[ "$feh" == "True" ]] && echo "scale" || echo "stretch"
     fi
 }
 
