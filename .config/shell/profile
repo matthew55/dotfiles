@@ -1,13 +1,14 @@
-#!/usr/bin/env bash
-
 # Start gnome keyring.
 if [ -n "$DESKTOP_SESSION" ];then
-    eval $(/usr/bin/gnome-keyring-daemon --start, --components=gpg,pkcs11,secrets,ssh)
+    eval "$(/usr/bin/gnome-keyring-daemon --start --components=gpg,pkcs11,secrets,ssh)"
     export GPG_AGENT_INFO GNOME_KEYRING_CONTROL GNOME_KEYRING_PID SSH_AUTH_SOCK 
 fi
 
 # Start compinit
-autoload -Uz compinit
+if [ -n "$ZSH_VERSION" ]; then
+  autoload -Uz compinit
+  compinit -d "$XDG_CACHE_HOME/zsh/zcompdump-$ZSH_VERSION"
+fi
 
 # Default programs:
 export EDITOR="nvim"
@@ -54,12 +55,18 @@ export FEHBG_PATH="$XDG_CONFIG_HOME/feh/fehbg" # https://github.com/derf/feh/pul
 export SOLARGRAPH_CACHE=$XDG_CACHE_HOME/solargraph 
 
 # Paths
-export PATH="$PATH:${$(find ~/.local/bin -type d -printf %p:)%%:}" # Adds `~/.local/bin` to $PATH
+if [ -n "$ZSH_VERSION" ]; then
+  export PATH="$PATH:${$(find ~/.local/bin -type d -printf '%p:')%%:}"
+else
+  while IFS= read -r dir; do
+    PATH="$PATH:$dir"
+  done < <(find ~/.local/bin -type d -printf '%p\n')
+fi
 export PATH="$PATH:$HOME/.local/share/gem/ruby/3.0.0/bin"
 export PATH="$PATH:$GEM_HOME/bin"
 
 # Load secret environmental variables if the file exists.
-[ -f "$XDG_CONFIG_HOME/shell/secrets" ] && "$XDG_CONFIG_HOME/shell/secrets"
+[ -f "$XDG_CONFIG_HOME/shell/secrets" ] && source "$XDG_CONFIG_HOME/shell/secrets"
 
 # Get proper colors.
 export TERM="xterm-256color"
