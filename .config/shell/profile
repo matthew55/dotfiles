@@ -59,7 +59,7 @@ export PATH="$PATH:$HOME/.local/share/gem/ruby/3.0.0/bin"
 export PATH="$PATH:$GEM_HOME/bin"
 
 # Load secret environmental variables if the file exists.
-[ -f "$XDG_CONFIG_HOME/shell/secrets" ] && . "$XDG_CONFIG_HOME/shell/secrets"
+[ -f "$XDG_CONFIG_HOME/shell/secrets" ] && "$XDG_CONFIG_HOME/shell/secrets"
 
 # Get proper colors.
 export TERM="xterm-256color"

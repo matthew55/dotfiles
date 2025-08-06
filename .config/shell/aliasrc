@@ -1,33 +1,33 @@
-#!/usr/bin/env bash
+#!/usr/bin/env sh
 
 # Use neovim for vim if present.
-[ -x "$(command -v nvim)" ] && alias vim="nvim" vimdiff="nvim -d"
+if command -v nvim >/dev/null 2>&1; then
+  alias vim="nvim"
+  alias vimdiff="nvim -d"
+fi
 
 # Use $XINITRC variable if file exists.
 [ -f "$XINITRC" ] && alias startx="startx $XINITRC"
-
 [ -f "$MBSYNCRC" ] && alias mbsync="mbsync -c $MBSYNCRC"
 
 # Extract almost every imaginable compressed file type.
-# Usage: ex <file>
-ex ()
-{
-  if [ -f "$1" ] ; then
-    case $1 in
-      *.tar.bz2)   tar xjf $1   ;;
-      *.tar.gz)    tar xzf $1   ;;
-      *.bz2)       bunzip2 $1   ;;
-      *.rar)       unrar x $1   ;;
-      *.gz)        gunzip $1    ;;
-      *.tar)       tar xf $1    ;;
-      *.tbz2)      tar xjf $1   ;;
-      *.tgz)       tar xzf $1   ;; 
-	  *.zip)       unzip $1     ;;
-      *.Z)         uncompress $1;;
-      *.7z)        7z x $1      ;;
-      *.deb)       ar x $1      ;;
-      *.tar.xz)    tar xf $1    ;;
-      *.tar.zst)   unzstd $1    ;;
+ex() {
+  if [ -f "$1" ]; then
+    case "$1" in
+      *.tar.bz2)   tar xjf "$1" ;;
+      *.tar.gz)    tar xzf "$1" ;;
+      *.bz2)       bunzip2 "$1" ;;
+      *.rar)       unrar x "$1" ;;
+      *.gz)        gunzip "$1" ;;
+      *.tar)       tar xf "$1" ;;
+      *.tbz2)      tar xjf "$1" ;;
+      *.tgz)       tar xzf "$1" ;; 
+      *.zip)       unzip "$1" ;;
+      *.Z)         uncompress "$1" ;;
+      *.7z)        7z x "$1" ;;
+      *.deb)       ar x "$1" ;;
+      *.tar.xz)    tar xf "$1" ;;
+      *.tar.zst)   unzstd "$1" ;;
       *)           echo "'$1' cannot be extracted via ex()" ;;
     esac
   else
@@ -35,112 +35,111 @@ ex ()
   fi
 }
 
-# Cd into directory just created.
-# Usage: mkcd <directory>
-mkcd ()
-{
-	[ -n $1 ] && mkdir $1 && cd $1 || echo "'$1' cannot be made"
+se() {
+  choice=$(find "$HOME/.local/bin" -mindepth 1 -printf '%P\n' | fzf)
+  [ -f "$HOME/.local/bin/$choice" ] && "$EDITOR" "$HOME/.local/bin/$choice"
 }
 
-# Copy files with rsync.
-# Usage: cpr </path/to/source> </path/to/destination>
+mkcd() {
+  [ -n "$1" ] && mkdir -p "$1" && cd "$1" || echo "'$1' cannot be made"
+}
+
 cpr() {
   rsync --archive -hh --partial --info=stats1,progress2 --modify-window=1 "$@"
-} 
+}
 
-# Move files with rsync.
-# Usage: mvr </path/to/source> </path/to/destination>
 mvr() {
   rsync --archive -hh --partial --info=stats1,progress2 --modify-window=1 --remove-source-files "$@"
 }
 
-# Swap two names
-# Usage: mkcd <file 1> <file 2>
-swapfiles()
-{
-	tmp="$(mktemp)"
-	[ -f $1 ] && [ -f $2 ] && cat "$1" > "$tmp" && mv -f "$2" "$1" && mv -f "$tmp" "$2" || echo "'$1' cannot be switched with '$2'"
-	unset tmp
+swapfiles() {
+  tmp="$(mktemp)"
+  if [ -f "$1" ] && [ -f "$2" ]; then
+    cat "$1" > "$tmp" && mv -f "$2" "$1" && mv -f "$tmp" "$2"
+  else
+    echo "'$1' cannot be switched with '$2'"
+  fi
+  unset tmp
 }
 
 # sudo not required for some system commands.
-for command in mount umount pacman nmtui su shutdown poweroff reboot ; do
-	alias $command="sudo $command"
-done; unset command
+alias mount="sudo mount"
+alias umount="sudo umount"
+alias pacman="sudo pacman"
+alias nmtui="sudo nmtui"
+alias su="sudo su"
+alias shutdown="sudo shutdown"
+alias poweroff="sudo poweroff"
+alias reboot="sudo reboot"
 
-# Verbosity and settings that you pretty much just always are going to want.
-alias \
-	cp="cp -iv" \
-	mv="mv -iv" \
-	rm="rm -vI" \
-	bc="bc -ql" \
-	mkd="mkdir -pv" \
-	yt="yt-dlp --embed-metadata -i" \
-	yta="yt -x -f bestaudio/best" \
-	ffmpeg="ffmpeg -hide_banner" \
-    df="df -h" \
-    free="free -m" \
-    jctl="journalctl -p 3 -xb" \
+# Core Aliases
+alias cp="cp -iv"
+alias mv="mv -iv"
+alias rm="rm -vI"
+alias bc="bc -ql"
+alias mkd="mkdir -pv"
+alias yt="yt-dlp --embed-metadata -i"
+alias yta="yt -x -f bestaudio/best"
+alias ffmpeg="ffmpeg -hide_banner"
+alias df="df -h"
+alias free="free -m"
+alias jctl="journalctl -p 3 -xb"
 
-# Colorize commands when possible.
-alias \
-	ls="ls -hFN --color=auto --group-directories-first" \
-	grep="grep --color=auto" \
-	diff="diff --color=auto" \
-	ip="ip -color=auto" \
-    yay="yay --color=auto" \
-    pacman="pacman --color=auto" \
-	cat="lolcat -f"
+# Colorized commands
+alias ls="ls -hFN --color=auto --group-directories-first"
+alias grep="grep --color=auto"
+alias diff="diff --color=auto"
+alias ip="ip -color=auto"
+alias yay="yay --color=auto"
+alias pacman="pacman --color=auto"
+alias cat="lolcat -f"
+alias neofetch="fastfetch"
 
-# Aliases
-alias \
-  ..="cd .." \
-  cleanup="sudo pacman -Rncs $(pacman -Qtdq)" \
-  cmatrix="cmatrix -a -u 3" \
-  gpg-check="gpg2 --keyserver-options auto-key-retrieve --verify" \
-  gpg-retrieve="gpg2 --keyserver-options auto-key-retrieve --receive-keys" \
-	la="ls -A" \
-	ll="ls -l" \
-	lal="ls -lA" \
-	lf="lfub" \
-    mvn="mvn -gs $XDG_CONFIG_HOME/maven/settings.xml" \
-	maven="mvn" \
-	py="python" \
-	speedtest="speedtest --secure" \
-	sxiv="nsxiv -a" \
-	nsxiv="nsxiv -a" \
-	sys="systemctl" \
-    xclip="xclip -selection clipboard" \
-	yarn="yarn --use-yarnrc ${XDG_CONFIG_HOME:-$HOME/.config}/yarn/config" \
+# Navigation and tools
+alias ..="cd .."
+alias cleanup='sudo pacman -Rncs $(pacman -Qtdq)'
+alias cmatrix="cmatrix -a -u 3"
+alias gpg-check="gpg2 --keyserver-options auto-key-retrieve --verify"
+alias gpg-retrieve="gpg2 --keyserver-options auto-key-retrieve --receive-keys"
+alias la="ls -A"
+alias ll="ls -l"
+alias lal="ls -lA"
+alias lf="lfub"
+alias mvn="mvn -gs ${XDG_CONFIG_HOME:-$HOME/.config}/maven/settings.xml"
+alias maven="mvn"
+alias py="python"
+alias speedtest="speedtest --secure"
+alias sxiv="nsxiv -a"
+alias nsxiv="nsxiv -a"
+alias sys="systemctl"
+alias xclip="xclip -selection clipboard"
+alias yarn="yarn --use-yarnrc ${XDG_CONFIG_HOME:-$HOME/.config}/yarn/config"
 
-# Run Scripts
-alias \
-    mirror="sudo reflector -f 30 -l 30 --number 10 --verbose --save /etc/pacman.d/mirrorlist" \
-    mirrord="sudo reflector --latest 50 --number 20 --sort delay --save /etc/pacman.d/mirrorlist" \
-    mirrors="sudo reflector --latest 50 --number 20 --sort score --save /etc/pacman.d/mirrorlist" \
-    mirrora="sudo reflector --latest 50 --number 20 --sort age --save /etc/pacman.d/mirrorlist" \
-	ref="shortcuts >/dev/null; source ${XDG_CONFIG_HOME:-$HOME/.config}/shell/shortcutrc" \
+# Reflector scripts
+alias mirror="sudo reflector -f 30 -l 30 --number 10 --verbose --save /etc/pacman.d/mirrorlist"
+alias mirrord="sudo reflector --latest 50 --number 20 --sort delay --save /etc/pacman.d/mirrorlist"
+alias mirrors="sudo reflector --latest 50 --number 20 --sort score --save /etc/pacman.d/mirrorlist"
+alias mirrora="sudo reflector --latest 50 --number 20 --sort age --save /etc/pacman.d/mirrorlist"
+alias ref="shortcuts >/dev/null; . \"${XDG_CONFIG_HOME:-$HOME/.config}/shell/shortcutrc\""
 
 # Curl
-alias \
-    myip="curl ifconfig.co" \
-    rr="curl -s -L http://bit.ly/10hA8iC | bash" \
-    weather="curl wttr.in" 
+alias myip="curl ifconfig.co"
+alias rr="curl -s -L http://bit.ly/10hA8iC | bash"
+alias weather="curl wttr.in"
 
-# Github Aliases
-alias \
-	addup="git add -u" \
-    addall="git add ." \
-    branch="git branch" \
-    checkout="git checkout" \
-    clone="git clone" \
-    commit="git commit" \
-	diff="git diff" \
-    fetch="git fetch" \
-    pull="git pull origin" \
-    push="git push" \
-    status="git status" \
-    tag="git tag" \
-    newtag="git tag -a" \
-    config="git --git-dir=$HOME/Desktop/coding-stuff/github/matthew55/dotfiles/ --work-tree=$HOME"
+# Git Aliases
+alias addup="git add -u"
+alias addall="git add ."
+alias branch="git branch"
+alias checkout="git checkout"
+alias clone="git clone"
+alias commit="git commit"
+alias gdiff="git diff"
+alias fetch="git fetch"
+alias pull="git pull origin"
+alias push="git push"
+alias status="git status"
+alias tag="git tag"
+alias newtag="git tag -a"
+alias config="git --git-dir=$HOME/Desktop/coding-stuff/github/matthew55/dotfiles/ --work-tree=$HOME"
 
