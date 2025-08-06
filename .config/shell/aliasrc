@@ -8,13 +8,6 @@
 
 [ -f "$MBSYNCRC" ] && alias mbsync="mbsync -c $MBSYNCRC"
 
-# Open script file selected with fzf.
-# Usage: se
-se() {
-	choice="$(find ~/.local/bin -mindepth 1 -printf '%P\n' | fzf)"
-	[ -f "$HOME/.local/bin/$choice" ] && $EDITOR "$HOME/.local/bin/$choice"
-}
-
 # Extract almost every imaginable compressed file type.
 # Usage: ex <file>
 ex ()
