@@ -13,10 +13,9 @@ autoload -Uz compinit
 export EDITOR="nvim"
 export TERMINAL="st"
 export TERMINAL_PROG="st"
-export BROWSER="librewolf"
+export BROWSER="zen-browser"
 
 # ~/ Clean-up:
-export XDG_SHARED_DIR="/home/shared"
 export XDG_VIDEOS_DIR="$HOME/Videos"
 export XDG_PICTURES_DIR="$HOME/Pictures"
 export XDG_DOCUMENTS_DIR="$HOME/Documents"
@@ -64,12 +63,6 @@ export PATH="$PATH:$GEM_HOME/bin"
 
 # Get proper colors.
 export TERM="xterm-256color"
-# Set default text editor.
-export EDITOR="nvim"
-# Set default terminal.
-export TERMINAL="st"
-# Set default browser.
-export BROWSER="librewolf"
 # Fix window-frames in vieb browser.
 export VIEB_WINDOW_FRAME="true"
 # Fix white screen of death in Java AWT programs.
@@ -85,5 +78,8 @@ label=$(echo "Chose a file or directory" | lolcat -f)
 export FZF_DEFAULT_OPTS="--border --border-label='╢ $label ╟' --color=label:italic:black --layout=reverse --height 40%"
 export FZF_DEFAULT_COMMAND="fd --type f" # Quicker sorting algorithm
 
+# Load shortcuts
+[ ! -f "$XDG_CONFIG_HOME/shell/shortcutrc" ] && setsid -f shortcuts >/dev/null 2>&1
+
 # Start graphical server on login if not already running.
-[ "$(tty)" = "/dev/tty1" ] && ! pidof -s Xorg >/dev/null 2>&1 && startx "$XINITRC"
+#[ "$(tty)" = "/dev/tty1" ] && ! pidof -s Xorg >/dev/null 2>&1 && startx "$XINITRC"

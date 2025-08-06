@@ -101,11 +101,11 @@ alias \
 
 # Aliases
 alias \
-    ..="cd .." \
-    cleanup="sudo pacman -Rncs $(pacman -Qtdq)" \
-    cmatrix="cmatrix -a -u 3" \
-    gpg-check="gpg2 --keyserver-options auto-key-retrieve --verify" \
-    gpg-retrieve="gpg2 --keyserver-options auto-key-retrieve --receive-keys" \
+  ..="cd .." \
+  cleanup="sudo pacman -Rncs $(pacman -Qtdq)" \
+  cmatrix="cmatrix -a -u 3" \
+  gpg-check="gpg2 --keyserver-options auto-key-retrieve --verify" \
+  gpg-retrieve="gpg2 --keyserver-options auto-key-retrieve --receive-keys" \
 	la="ls -A" \
 	ll="ls -l" \
 	lal="ls -lA" \
@@ -149,5 +149,5 @@ alias \
     status="git status" \
     tag="git tag" \
     newtag="git tag -a" \
-    config="git --git-dir=${XDG_SHARED_DIR:-/home/shared}/coding-stuff/github/matthew55/dotfiles/ --work-tree=$HOME"
+    config="git --git-dir=$HOME/Desktop/coding-stuff/github/matthew55/dotfiles/ --work-tree=$HOME"
 
