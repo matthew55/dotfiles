@@ -1,3 +1,4 @@
+#!/bin/sh
 # Desktop background and transparency.
 #[ -f ~/.fehbg ] && sh ~/.fehbg &
 #[ ! -f ~/.fehbg ] && feh --bg-scale //Pictures/desktop-backgrounds/city-night.png
@@ -32,7 +33,7 @@ blueman-applet & 2>/dev/null
 setxkbmap -option caps:escape
 
 # Load Xresources and redirect xrdb to PyWal's Xresource's file.
-#[[ -f ${XDG_CONFIG_HOME:-$HOME/.config}/x11/.Xresources ]] && xrdb -merge -I$HOME ${XDG_CONFIG_HOME:-$HOME/.config}/x11/.Xresources && xrdb -merge ${XDG_CACHE_HOME:-$HOME/.cache}/wal/colors.Xresources
+#[[ -f ${XDG_CONFIG_HOME:-$HOME/.config}/x11/.Xresources ]] && xrdb -merge -I$HOME ${XDG_CONFIG_HOME:-$HOME/.config}/x11/.Xresources && xrdb -merge ${XDG_CACHE_HOME:-$HOME/.cache}/wal/colors.Xreso[...]
 
 # Start our status bar.
 dwmblocks &
