@@ -24,6 +24,10 @@ EOF
 # Set the correct permissions (required by sudo)
 sudo chmod 440 "/etc/sudoers.d/15-mount-automation"
 
+# Remove beep
+rmmod pcspkr
+echo "blacklist pcspkr" >/etc/modprobe.d/nobeep.conf
+
 echo "Enabling maintenance timer..."
 systemctl --user daemon-reload
 systemctl --user enable --now maintenance.timer

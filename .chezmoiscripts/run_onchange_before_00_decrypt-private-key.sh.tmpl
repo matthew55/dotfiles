@@ -7,6 +7,9 @@
 
 set -e
 
+read -p "Will you be installing the custom SSH keys? (y/n): " answer
+[[ "$answer" =~ ^[yY] ]] || exit 0
+
 SECRETS_PATH="$HOME/.local/share/secrets"
 KEY_PATH="$SECRETS_PATH/key.txt"
 
