@@ -1,0 +1,59 @@
+#!/usr/bin/env bash
+# Imports SSH & GPG keys from encrypted KeePassXC stored on Chezmoi git repo automatically.
+
+# vim: filetype=bash
+
+# Secrets.kdbx hash: {{ include (joinPath .chezmoi.sourceDir "private_dot_local/share/secrets/encrypted_private_Secrets.kdbx.age") | sha256sum }}
+
+set -e
+
+SECRETS_PATH="$HOME/.local/share/secrets"
+DB_PATH="$SECRETS_PATH/Secrets.kdbx"
+SSH_PATH="$HOME/.ssh"
+GPG_DATA_HOME="${XDG_DATA_HOME:-$HOME/.local/share}/gnupg"
+
+SSH_ENTRY="SSH/SSH Key Attachments"
+GPG_ENTRY="GPG/GPG Key Attachments"
+
+echo "Importing SSH and GPG keys from KeePassXC..."
+[ ! -d "$SSH_PATH" ] && mkdir -p "$SSH_PATH" && chmod 700 "$SSH_PATH"
+[ ! -d "$GPG_DATA_HOME" ] && mkdir -p "$GPG_DATA_HOME" && chmod 700 "$GPG_DATA_HOME"
+
+export GNUPGHOME="$GPG_DATA_HOME"
+
+read -r -s -p "Enter Master Password for $DB_PATH: " PASSWORD
+echo ""
+
+ssh_files=$(echo "$PASSWORD" | keepassxc-cli show --show-attachments -q "$DB_PATH" "$SSH_ENTRY" | sed -n '/Attachments:/,$p' | tail -n +2 | awk '{print $1}')
+
+for file in $ssh_files; do
+    echo "Importing SSH Key: $file"
+    echo "$PASSWORD" | keepassxc-cli attachment-export -q "$DB_PATH" "$SSH_ENTRY" "$file" "$SSH_PATH/$file"
+done
+
+gpg_files=$(echo "$PASSWORD" | keepassxc-cli show --show-attachments -q "$DB_PATH" "$GPG_ENTRY" | sed -n '/Attachments:/,$p' | tail -n +2 | awk '{print $1}')
+
+for file in $gpg_files; do
+    TMP_FILE=$(mktemp)
+    echo "$PASSWORD" | keepassxc-cli attachment-export -q "$DB_PATH" "$GPG_ENTRY" "$file" "$TMP_FILE"
+    if [[ "$file" == "trust_settings.txt" ]]; then
+        echo "Importing GPG Trust: $file"
+        gpg --import-ownertrust -q "$TMP_FILE"
+    else
+        echo "Importing GPG Key: $file"
+        gpg --batch --import -q "$TMP_FILE"
+    fi
+    rm -f "$TMP_FILE"
+done
+
+# Permissions for SSH & GPG
+find "$SSH_PATH" -type f -exec chmod 600 {} +
+find "$SSH_PATH" -type f \( -name "*.pub" -o -name "known_hosts" \) -exec chmod 644 {} +
+find "$GPG_DATA_HOME" -type d -exec chmod 700 {} +
+find "$GPG_DATA_HOME" -type f -exec chmod 600 {} +
+
+gpgconf --kill gpg-agent
+gpgconf --launch gpg-agent
+
+unset PASSWORD
+echo "Done! SSH keys in $SSH_PATH and GPG keys imported to $GPG_DATA_HOME"

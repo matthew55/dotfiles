@@ -1,0 +1,10 @@
+#!/usr/bin/env bash
+tmp="$(mktemp /tmp/imv_edit_XXXXXX.png)"
+ext="${1##*.}"
+
+magick "$1" "$tmp" &&
+satty --filename "$tmp" --output-filename "$tmp" --disable-notifications &&
+magick "$tmp" "${tmp%.*}.$ext" &&
+mv -f "${tmp%.*}.$ext" "$1"
+
+rm -f "$tmp"

@@ -1,0 +1,16 @@
+#!/usr/bin/env bash
+
+# Script for Hyprland that will allow moving windows to fallback to a different direction if they fail.
+
+set -e
+
+ADDR=$(hyprctl activewindow -j | jq -r '.address')
+POS_BEFORE=$(hyprctl activewindow -j | jq -r '.at')
+# Try moving
+hyprctl dispatch movewindow $1
+POS_AFTER=$(hyprctl activewindow -j | jq -r '.at')
+
+# If position didn't change, try the fallback
+if [ "$POS_BEFORE" = "$POS_AFTER" ]; then
+    hyprctl dispatch movewindow $2
+fi

@@ -1,0 +1,59 @@
+# Default programs
+export EDITOR="nvim"
+export TERMINAL="kitty"
+export TERMINAL_PROG="kitty"
+export BROWSER="zen-browser"
+
+# ~/ Clean-up
+export XDG_VIDEOS_DIR="$HOME/Videos"
+export XDG_PICTURES_DIR="$HOME/Pictures"
+export XDG_DOCUMENTS_DIR="$HOME/Documents"
+export XDG_DOWNLOADS_DIR="$HOME/Downloads"
+export XDG_DESKTOP_DIR="$HOME/Desktop"
+export XDG_CONFIG_HOME="$HOME/.config"
+export XDG_DATA_HOME="$HOME/.local/share"
+export XDG_CACHE_HOME="$HOME/.cache"
+export XDG_STATE_HOME="$HOME/.local/state"
+export NOTMUCH_CONFIG="$XDG_CONFIG_HOME/notmuch-config"
+export GTK2_RC_FILES="$XDG_CONFIG_HOME/gtk-2.0/gtkrc-2.0"
+export WGETRC="$XDG_CONFIG_HOME/wget/wgetrc"
+export INPUTRC="$XDG_CONFIG_HOME/shell/inputrc"
+export ZDOTDIR="$XDG_CONFIG_HOME/zsh"
+export GNUPGHOME="$XDG_DATA_HOME/gnupg"
+export WINEPREFIX="$XDG_DATA_HOME/wine"
+export PASSWORD_STORE_DIR="$XDG_DATA_HOME/password-store"
+export MBSYNCRC="$XDG_CONFIG_HOME/mbsync/mbsyncrc"
+export TMUX_TMPDIR="$XDG_RUNTIME_DIR"
+export ANDROID_SDK_HOME="$XDG_CONFIG_HOME/android"
+export CARGO_HOME="$XDG_DATA_HOME/cargo"
+export GOPATH="$XDG_DATA_HOME/go"
+export HISTFILE="$XDG_STATE_HOME/bash/history"
+export ELECTRUMDIR="$XDG_DATA_HOME/electrum"
+export RUSTUP_HOME="$XDG_DATA_HOME/rustup"
+#export GVIMINIT='let $MYGVIMRC="$XDG_CONFIG_HOME/vim/gvimrc" | source $MYGVIMRC'
+#export VIMINIT='let $MYVIMRC="$XDG_CONFIG_HOME/vim/vimrc" | source $MYVIMRC'
+export GRADLE_USER_HOME="$XDG_DATA_HOME"/gradle
+export _JAVA_OPTIONS="-Djava.util.prefs.userRoot=$XDG_CONFIG_HOME/java -Dawt.toolkit.name=WLToolkit"
+export NPM_CONFIG_USERCONFIG="$XDG_CONFIG_HOME/npm/npmrc"
+export VSCODE_PORTABLE="$XDG_DATA_HOME/vscode"
+export FEHBG_PATH="$XDG_CONFIG_HOME/feh/fehbg" # https://github.com/derf/feh/pull/668
+#export GEM_HOME="$(ruby -e 'puts Gem.user_dir')"
+export SOLARGRAPH_CACHE=$XDG_CACHE_HOME/solargraph 
+
+# Paths
+if [ -n "$ZSH_VERSION" ]; then
+  export PATH="$PATH:${$(find ~/.local/bin -type d -printf '%p:')%%:}"
+else
+  while IFS= read -r dir; do
+    PATH="$PATH:$dir"
+  done < <(find ~/.local/bin -type d -printf '%p\n')
+fi
+export PATH="$PATH:$HOME/.local/share/gem/ruby/3.0.0/bin"
+export PATH="$PATH:$GEM_HOME/bin"
+
+# Fix window-frames in vieb browser
+export VIEB_WINDOW_FRAME="true"
+# Fix white screen of death in Java AWT programs
+#export _JAVA_AWT_WM_NONREPARENTING=1
+# Prevent ranger from loading default config
+export RANGER_LOAD_DEFAULT_RC="false"

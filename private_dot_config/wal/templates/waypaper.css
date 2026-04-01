@@ -1,0 +1,29 @@
+/* pywal template */
+
+window {
+    /* Using {color0} for the background with 30% opacity */
+    background-color: rgba({color0.rgb}, 0.3);
+}
+
+button:hover {
+    background-image: none;
+    box-shadow: none;
+    border-color: transparent;
+}
+
+button:hover > image {
+    -gtk-icon-shadow: none;
+    -gtk-icon-effect: none;
+}
+
+.highlighted-button {
+    background-image: none;
+    box-shadow: none;
+    /* Using {color7} or {foreground} for the highlight with 50% opacity */
+    background-color: rgba({color7.rgb}, 0.5);
+}
+
+.highlighted-button > image, 
+.highlighted-button:hover > image {
+    -gtk-icon-effect: highlight;
+}

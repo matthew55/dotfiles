@@ -1,0 +1,18 @@
+[binds]
+# Rotate 90 degrees clockwise
+<Shift+R> = exec mogrify -rotate 90 "$imv_current_file"
+
+# Flip horizontally (Mirror)
+<Shift+M> = exec mogrify -flop "$imv_current_file"
+
+# Basic Auto-Level (Fixes colors/contrast automatically)
+<Shift+L> = exec mogrify -auto-level "$imv_current_file"
+
+# Convert to PNG (Useful if you're viewing a weird format)
+#<Shift+C> = exec convert "$imv_current_file" "${imv_current_file%.*}.png"
+
+# Delete the file (Careful!)
+#<Shift+D> = exec rm "$imv_current_file"; close
+
+# Edit the current image
+<Shift+E> = exec imv-satty-edit "$imv_current_file" &

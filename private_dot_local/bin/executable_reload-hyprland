@@ -1,0 +1,21 @@
+#!/usr/bin/env bash
+
+# Get the current workspace and window
+WORKSPACE=$(hyprctl activeworkspace -j | jq -r '.id')
+WINDOW=$(hyprctl activewindow -j 2>/dev/null | jq -r '.address' || echo "")
+
+killall -9 waybar 2>/dev/null
+while pgrep -u $USER -x waybar >/dev/null; do sleep 0.1; done
+waybar &
+if pgrep -x mako >/dev/null; then
+    mako-ctl reload 2>/dev/null
+fi
+
+hyprctl reload
+
+# Re-focus the workspace and window after reload
+sleep 0.2
+hyprctl dispatch workspace "$WORKSPACE"
+if [[ "$WINDOW" != "null" && -n "$WINDOW" ]]; then
+    hyprctl dispatch focuswindow address:"$WINDOW"
+fi   

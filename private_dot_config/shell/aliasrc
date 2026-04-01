@@ -1,0 +1,86 @@
+# Use neovim for vim if present.
+if command -v nvim >/dev/null 2>&1; then
+  alias vim="nvim"
+fi
+
+# Extract almost every imaginable compressed file type.
+ex() {
+  if [ -f "$1" ]; then
+    case "$1" in
+      *.tar.bz2)   tar xjf "$1" ;;
+      *.tar.gz)    tar xzf "$1" ;;
+      *.bz2)       bunzip2 "$1" ;;
+      *.rar)       unrar x "$1" ;;
+      *.gz)        gunzip "$1" ;;
+      *.tar)       tar xf "$1" ;;
+      *.tbz2)      tar xjf "$1" ;;
+      *.tgz)       tar xzf "$1" ;; 
+      *.zip)       unzip "$1" ;;
+      *.Z)         uncompress "$1" ;;
+      *.7z)        7z x "$1" ;;
+      *.deb)       ar x "$1" ;;
+      *.tar.xz)    tar xf "$1" ;;
+      *.tar.zst)   unzstd "$1" ;;
+      *)           echo "'$1' cannot be extracted via ex()" ;;
+    esac
+  else
+    echo "'$1' is not a valid file"
+  fi
+}
+
+mkcd() {
+  [ -n "$1" ] && mkdir -p "$1" && cd "$1" || echo "'$1' cannot be made"
+}
+
+cpr() {
+  rsync --archive -hh --partial --info=stats1,progress2 --modify-window=1 "$@"
+}
+
+mvr() {
+  rsync --archive -hh --partial --info=stats1,progress2 --modify-window=1 --remove-source-files "$@"
+}
+
+# Core Aliases
+alias cp="cp -iv"
+alias mv="mv -iv"
+alias rm="rm -vI"
+alias bc="bc -ql"
+alias mkd="mkdir -pv"
+alias yt="yt-dlp --embed-metadata -i"
+alias yta="yt -x -f bestaudio/best"
+alias ffmpeg="ffmpeg -hide_banner"
+alias df="df -h"
+alias free="free -m"
+alias jctl="journalctl -p 3 -xb"
+
+# Colorized commands
+alias ls="ls -hFN --color=auto --group-directories-first"
+alias grep="grep --color=auto"
+alias diff="diff --color=auto"
+alias ip="ip -color=auto"
+alias yay="yay --color=auto"
+alias pacman="pacman --color=auto"
+alias neofetch="fastfetch"
+
+# Navigation and tools
+alias ..="cd .."
+alias cmatrix="cmatrix -a -u 3"
+alias la="ls -A"
+alias ll="ls -l"
+alias lal="ls -lA"
+alias lf="lfub"
+alias mvn="mvn -gs $XDG_CONFIG_HOME/maven/settings.xml"
+alias py="python"
+alias speedtest="speedtest --secure"
+alias sxiv="nsxiv -a"
+alias nsxiv="nsxiv -a"
+alias sys="systemctl"
+alias yarn="yarn --use-yarnrc $XDG_CONFIG_HOME/yarn/config"
+
+# Reflector scripts
+alias mirror="sudo reflector -f 30 -l 30 --number 10 --verbose --save /etc/pacman.d/mirrorlist"
+
+# Curl
+alias myip="curl ifconfig.co"
+alias rr="curl -s -L http://bit.ly/10hA8iC | bash"
+alias weather="curl wttr.in"

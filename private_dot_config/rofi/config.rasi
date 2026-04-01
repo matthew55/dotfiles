@@ -1,0 +1,27 @@
+configuration {
+    // Icons
+    modi: "run,drun,window";
+    show-icons: true;
+    icon-theme: "Papirus";
+    terminal: "kitty"; 
+    drun-display-format: "{icon} {name}";
+
+    // Unbind defaults to prevent "already bound" errors
+    kb-move-char-back: "";
+    kb-move-char-forward: "";
+    kb-mode-next: "";
+    kb-mode-previous: "";
+
+    // Vim-style navigation with Alt
+    kb-row-up: "Alt+k,Up";
+    kb-row-down: "Alt+j,Down";
+    kb-row-left: "Alt+h,Left";
+    kb-row-right: "Alt+l,Right";
+    kb-row-first: "Alt+g,Home";
+    kb-row-last: "Alt+G,End";
+}
+
+
+
+
+@theme "/home/matthew/.local/share/rofi/themes/launchpad.rasi"

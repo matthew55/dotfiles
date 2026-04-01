@@ -1,0 +1,3 @@
+#!/usr/bin/env sh
+HOME="/home/matthew/.local/data/games/steam-garbage"
+exec /usr/bin/steam "$@"

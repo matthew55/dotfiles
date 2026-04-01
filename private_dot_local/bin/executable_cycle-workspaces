@@ -1,0 +1,40 @@
+#!/usr/bin/env bash
+
+# Script for Hyprland that will allow moving windows to the next relative workstation without forcing all workstations to always be enabled. This script particularly caps the number of workstations to 9.
+
+set -e
+
+WORKSPACES_PER_MONITOR=${WS_PER_MONITOR:-9}
+current=$(hyprctl activeworkspace -j | jq '.id')
+relative=$(( (current - 1) % WORKSPACES_PER_MONITOR + 1 ))
+base=$(( current - relative + 1 ))
+
+next() {
+    if [ "$relative" -lt "$WORKSPACES_PER_MONITOR" ]; then
+        echo $((base + relative))
+    else
+        echo "$base"
+    fi
+}
+
+prev() {
+    if [ "$relative" -gt 1 ]; then
+        echo $((base + relative - 2))
+    else
+        echo $((base + WORKSPACES_PER_MONITOR - 1))
+    fi
+}
+
+if [ "$1" == "move" ]; then
+    if [ "$2" == "next" ]; then
+        hyprctl dispatch movetoworkspace "$(next)"
+    elif [ "$2" == "prev" ]; then
+        hyprctl dispatch movetoworkspace "$(prev)"
+    fi
+elif [ "$1" == "cycle" ]; then
+    if [ "$2" == "next" ]; then
+        hyprctl dispatch workspace "$(next)"
+    elif [ "$2" == "prev" ]; then
+        hyprctl dispatch workspace "$(prev)"
+    fi
+fi

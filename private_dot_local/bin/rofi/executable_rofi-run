@@ -1,0 +1,51 @@
+#!/usr/bin/env bash
+# Script that will run rofi with a particular theme that is better suited for list or blocks
+# depending on the flags provided to rofi.
+
+ARGS=("$@")
+CMD_LINE="$*"
+
+# Extract theme name
+THEME=$(echo "$CMD_LINE" | grep -oP '(?<=-theme )[^ ]+')
+
+if [ -z "$THEME" ]; then
+    CONFIG_FILE="$HOME/.config/rofi/config.rasi"
+    if [ -f "$CONFIG_FILE" ]; then
+        THEME=$(grep "^@theme" "$CONFIG_FILE" | head -n 1 | sed 's|.*/||; s/\.rasi.*//; s/[" ]//g')
+    fi
+fi
+
+IS_NOT_STANDARD_SHOW=true
+if [[ "$CMD_LINE" == *"-show drun"* ]] || [[ "$CMD_LINE" == *"-show run"* ]]; then
+    IS_NOT_STANDARD_SHOW=false
+fi
+
+NEW_THEME=""
+if [ -n "$THEME" ]; then
+    # Windows 11 Logic: If it's a grid/list and NOT a standard show, force the list version
+    if [[ "$THEME" == *"windows11-grid"* ]] || [[ "$THEME" == *"windows11-list"* ]]; then
+        if [ "$IS_NOT_STANDARD_SHOW" = true ]; then
+            [[ "$THEME" == *"dark"* ]] && NEW_THEME="windows11-list-dark" || NEW_THEME="windows11-list-light"
+        fi
+    
+    # Spotlight/Launchpad Logic
+    elif [[ "$THEME" == "spotlight" ]] || [[ "$THEME" == "launchpad" ]]; then
+        if [ "$IS_NOT_STANDARD_SHOW" = true ]; then
+            NEW_THEME="spotlight"
+        fi
+    fi
+fi
+
+if [ -n "$NEW_THEME" ]; then
+    if [[ "$CMD_LINE" == *"-theme"* ]]; then
+        for i in "${!ARGS[@]}"; do
+           if [[ "${ARGS[i]}" == "$THEME" ]]; then
+               ARGS[i]="$NEW_THEME"
+           fi
+        done
+    else
+        ARGS+=("-theme" "$NEW_THEME")
+    fi
+fi
+
+rofi "${ARGS[@]}"

@@ -1,0 +1,21 @@
+#!/usr/bin/env bash
+# Decrypt the age key used for encrypting the rest of the chezmoi secrets.
+
+# vim: filetype=bash
+
+# key.txt hash: {{ include (joinPath .chezmoi.sourceDir "private_dot_local/share/secrets/key.txt.age") | sha256sum }}
+
+set -e
+
+SECRETS_PATH="$HOME/.local/share/secrets"
+KEY_PATH="$SECRETS_PATH/key.txt"
+
+echo "Decrypting secrets..."
+[ ! -d "$SECRETS_PATH" ] && mkdir -p "$SECRETS_PATH"
+
+if [ ! -f "$KEY_PATH" ]; then
+    chezmoi age decrypt --output "$KEY_PATH" --passphrase "{{ .chezmoi.sourceDir }}/private_dot_local/share/secrets/key.txt.age"
+    chmod 600 "$KEY_PATH"
+fi
+echo "Done!"
+

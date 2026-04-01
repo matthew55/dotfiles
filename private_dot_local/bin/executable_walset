@@ -1,0 +1,7 @@
+#!/usr/bin/env bash
+# Post swww run script that updates pywal cache and refreshes programs
+# Args <wallpaper>
+
+wal -i "$1" -n
+
+reload-hyprland

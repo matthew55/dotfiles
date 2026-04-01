@@ -1,0 +1,20 @@
+# Start compinit
+if [ -n "$ZSH_VERSION" ]; then
+  autoload -Uz compinit
+  compinit -d "$XDG_CACHE_HOME/zsh/zcompdump-$ZSH_VERSION"
+fi
+
+# Load environmental variables
+[ -f "$XDG_CONFIG_HOME/shell/env" ] && source "$XDG_CONFIG_HOME/shell/env"
+
+# Load secret environmental variables if the file exists.
+[ -f "$XDG_CONFIG_HOME/shell/secrets" ] && source "$XDG_CONFIG_HOME/shell/secrets"
+
+# Set FZF settings
+#label=$(echo "Chose a file or directory" | lolcat -f)
+label=$(echo "Chose a file or directory" | cat)
+export FZF_DEFAULT_OPTS="--border --border-label='╢ $label ╟' --color=label:italic:black --layout=reverse --height 40%"
+export FZF_DEFAULT_COMMAND="fd --type f" # Quicker sorting algorithm
+
+# Load shortcuts
+[ ! -f "$XDG_CONFIG_HOME/shell/shortcutrc" ] && setsid -f shortcuts >/dev/null 2>&1

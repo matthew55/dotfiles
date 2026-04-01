@@ -1,0 +1,11 @@
+[Unit]
+Description=Daily System Maintenance
+After=graphical-session.target
+
+[Service]
+Type=oneshot
+PassEnvironment=DISPLAY WAYLAND_DISPLAY DBUS_SESSION_BUS_ADDRESS
+ExecStart=%h/.local/bin/sys-maintenance.sh
+
+[Install]
+WantedBy=default.target

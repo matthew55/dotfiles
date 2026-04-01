@@ -1,0 +1,28 @@
+# Global settings
+max-history=100
+sort=-time
+
+# --- The "Stacking" Logic ---
+group-by=summary,body
+
+# --- The "Disappearing" Logic ---
+default-timeout=5000
+
+# --- Pywal Dynamic Styling ---
+# Using {background} and {foreground} for maximum readability
+background-color={background}
+text-color={foreground}
+border-color={color4}
+progress-color=source {color2}
+border-size=2
+border-radius=5
+font=monospace 10
+
+# Specific behavior for grouped notifications
+[grouped]
+format=<b>%s</b> (%g)\n%b
+
+# Optional: High urgency (Red)
+[urgency=high]
+border-color={color1}
+default-timeout=0
