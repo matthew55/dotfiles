@@ -7,6 +7,8 @@
 
 set -e
 
+{{- $installSecrets := .installSecrets | default false -}}
+
 {{ if .installSecrets -}}
 
 SECRETS_PATH="$HOME/.local/share/secrets"

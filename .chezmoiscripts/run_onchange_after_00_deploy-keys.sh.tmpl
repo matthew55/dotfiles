@@ -5,6 +5,8 @@
 
 # Secrets.kdbx hash: {{ include (joinPath .chezmoi.sourceDir "private_dot_local/share/secrets/encrypted_private_Secrets.kdbx.age") | sha256sum }}
 
+{{- $installSecrets := .installSecrets | default false -}}
+
 {{ if .installSecrets -}}
 
 set -e
