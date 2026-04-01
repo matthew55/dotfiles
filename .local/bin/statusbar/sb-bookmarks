@@ -1,0 +1,24 @@
+#!/bin/sh
+
+# Show the user's ~/.config/shell/shortcutrc file as a PDF.
+
+PDF_VIEWER="zathura"
+BOOKMARKS="${XDG_CACHE_HOME:-$HOME/.cache}/bookmarks.pdf"
+SHORTCUTRC="${XDG_CONFIG_HOME:-$HOME/.config}/shell/shortcutrc"
+
+case $BLOCK_BUTTON in
+	1)  [ -n "$BOOKMARKS" ] && update_pdf
+		"$PDF_VIEWER" "$BOOKMARKS" ;;
+	3) notify-send "❓ Bookmark helper" "\- Shows the user\'s bookmarks as a PDF." ;;
+	6) "$TERMINAL" -e "$EDITOR" "$0" ;;
+esac
+
+update_pdf() {
+	TEMP="$(mktemp)"
+	tail -n +2 "$SHORTCUTRC" > "$TEMP" # Remove first line 
+	text2pdf "$TEMP" > "$BOOKMARKS"
+	rm "$TEMP"
+}
+
+update_pdf
+echo "❓"

@@ -1,0 +1,14 @@
+#!/bin/sh
+
+# Displays number of upgradeable packages.
+
+case $BLOCK_BUTTON in
+	1) setsid -f "$TERMINAL" -e sb-popupgrade ;;
+	2) notify-send "$(checkupdates)" ;;
+	3) notify-send "🎁 Upgrade module" "📦: number of upgradable packages
+- Left click to upgrade packages
+- Middle click to show upgradable packages" ;;
+	6) "$TERMINAL" -e "$EDITOR" "$0" ;;
+esac
+
+checkupdates 2>/dev/null | grep -Fcv "[ignored]" | sed "s/^/📦/;"

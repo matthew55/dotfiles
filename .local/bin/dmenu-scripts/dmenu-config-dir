@@ -1,0 +1,19 @@
+#!/usr/bin/bash
+# Opens a directory or file in the ~/.config directory.
+# Assumes TERMINAL and EDITOR are defined.
+
+filemanager=lf
+
+config=$HOME/.config/ && cd $config
+
+choice=$(ls | 
+    sort |
+    dmenu -l 20 -p "Which File / Directory?") || exit 1
+
+choice_path=$config$choice
+
+if [ -d "$choice_path" ]; then
+    $TERMINAL -e $filemanager "$choice_path"
+else 
+    $TERMINAL -e $EDITOR "$choice_path"
+fi

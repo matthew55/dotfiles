@@ -1,0 +1,93 @@
+# Start gnome keyring.
+if [ -n "$DESKTOP_SESSION" ];then
+    eval "$(/usr/bin/gnome-keyring-daemon --start --components=gpg,pkcs11,secrets,ssh)"
+    export GPG_AGENT_INFO GNOME_KEYRING_CONTROL GNOME_KEYRING_PID SSH_AUTH_SOCK 
+fi
+
+# Start compinit
+if [ -n "$ZSH_VERSION" ]; then
+  autoload -Uz compinit
+  compinit -d "$XDG_CACHE_HOME/zsh/zcompdump-$ZSH_VERSION"
+fi
+
+# Default programs:
+export EDITOR="nvim"
+export TERMINAL="st"
+export TERMINAL_PROG="st"
+export BROWSER="zen-browser"
+
+# ~/ Clean-up:
+export XDG_VIDEOS_DIR="$HOME/Videos"
+export XDG_PICTURES_DIR="$HOME/Pictures"
+export XDG_DOCUMENTS_DIR="$HOME/Documents"
+export XDG_DOWNLOADS_DIR="$HOME/Downloads"
+export XDG_DESKTOP_DIR="$HOME/Desktop"
+export XDG_CONFIG_HOME="$HOME/.config"
+export XDG_DATA_HOME="$HOME/.local/share"
+export XDG_CACHE_HOME="$HOME/.cache"
+export XDG_STATE_HOME="$XDG_DATA_HOME/state"
+export XINITRC="$XDG_CONFIG_HOME/x11/xinitrc"
+export XDG_XSESSION="$XDG_CONFIG_HOME/x11/xsession"
+#export XAUTHORITY="$XDG_RUNTIME_DIR/Xauthority" # This line will break some DMs.
+export NOTMUCH_CONFIG="$XDG_CONFIG_HOME/notmuch-config"
+export GTK2_RC_FILES="$XDG_CONFIG_HOME/gtk-2.0/gtkrc-2.0"
+export WGETRC="$XDG_CONFIG_HOME/wget/wgetrc"
+export INPUTRC="$XDG_CONFIG_HOME/shell/inputrc"
+export ZDOTDIR="$XDG_CONFIG_HOME/zsh"
+compinit -d $XDG_CACHE_HOME/zsh/zcompdump-$ZSH_VERSION
+export GNUPGHOME="$XDG_DATA_HOME/gnupg"
+export WINEPREFIX="$XDG_DATA_HOME/wineprefixes/default"
+export PASSWORD_STORE_DIR="$XDG_DATA_HOME/password-store"
+export MBSYNCRC="$XDG_CONFIG_HOME/mbsync/mbsyncrc"
+export TMUX_TMPDIR="$XDG_RUNTIME_DIR"
+export ANDROID_SDK_HOME="$XDG_CONFIG_HOME/android"
+export CARGO_HOME="$XDG_DATA_HOME/cargo"
+export GOPATH="$XDG_DATA_HOME/go"
+export HISTFILE="$XDG_DATA_HOME/history"
+export ELECTRUMDIR="$XDG_DATA_HOME/electrum"
+export GVIMINIT='let $MYGVIMRC="$XDG_CONFIG_HOME/vim/gvimrc" | source $MYGVIMRC'
+export VIMINIT='let $MYVIMRC="$XDG_CONFIG_HOME/vim/vimrc" | source $MYVIMRC'
+export GRADLE_USER_HOME="$XDG_DATA_HOME"/gradle
+export _JAVA_OPTIONS=-Djava.util.prefs.userRoot="$XDG_CONFIG_HOME"/java
+export NPM_CONFIG_USERCONFIG="$XDG_CONFIG_HOME/npm/npmrc"
+export VSCODE_PORTABLE="$XDG_DATA_HOME/vscode"
+export FEHBG_PATH="$XDG_CONFIG_HOME/feh/fehbg" # https://github.com/derf/feh/pull/668
+#export GEM_HOME="$(ruby -e 'puts Gem.user_dir')"
+export SOLARGRAPH_CACHE=$XDG_CACHE_HOME/solargraph 
+
+# Paths
+if [ -n "$ZSH_VERSION" ]; then
+  export PATH="$PATH:${$(find ~/.local/bin -type d -printf '%p:')%%:}"
+else
+  while IFS= read -r dir; do
+    PATH="$PATH:$dir"
+  done < <(find ~/.local/bin -type d -printf '%p\n')
+fi
+export PATH="$PATH:$HOME/.local/share/gem/ruby/3.0.0/bin"
+export PATH="$PATH:$GEM_HOME/bin"
+
+# Load secret environmental variables if the file exists.
+[ -f "$XDG_CONFIG_HOME/shell/secrets" ] && source "$XDG_CONFIG_HOME/shell/secrets"
+
+# Get proper colors.
+export TERM="xterm-256color"
+# Fix window-frames in vieb browser.
+export VIEB_WINDOW_FRAME="true"
+# Fix white screen of death in Java AWT programs.
+export _JAVA_AWT_WM_NONREPARENTING=1
+# Prevent ranger from loading default config.
+export RANGER_LOAD_DEFAULT_RC="false"
+# Gtk3 theme for QT environmental
+export QT_QPA_PLATFORMTHEME="gtk3"
+# Set password prompt
+export SUDO_ASKPASS="$HOME/.local/bin/dmenu-scripts/dmenu-pass"
+# Set FZF settings
+label=$(echo "Chose a file or directory" | lolcat -f)
+export FZF_DEFAULT_OPTS="--border --border-label='╢ $label ╟' --color=label:italic:black --layout=reverse --height 40%"
+export FZF_DEFAULT_COMMAND="fd --type f" # Quicker sorting algorithm
+
+# Load shortcuts
+[ ! -f "$XDG_CONFIG_HOME/shell/shortcutrc" ] && setsid -f shortcuts >/dev/null 2>&1
+
+# Start graphical server on login if not already running.
+#[ "$(tty)" = "/dev/tty1" ] && ! pidof -s Xorg >/dev/null 2>&1 && startx "$XINITRC"

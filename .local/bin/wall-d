@@ -1,0 +1,274 @@
+#! /usr/bin/env bash
+
+#  __        ___    _     _          ____
+#  \ \      / / \  | |   | |        |  _ \
+#   \ \ /\ / / _ \ | |   | |   _____| | | |
+#    \ V  V / ___ \| |___| |__|_____| |_| |
+#     \_/\_/_/   \_\_____|_____|    |____/
+# https://github.com/ronniedroid/Wall-d
+
+DIR=""  # Path to wallpapers directory
+DEFAULT_WALL="$HOME/.local/bin/defaultwallpaper.sh"
+LAST_WALL="$HOME/.local/bin/lastwallpaper"
+
+# Ensure default wallpaper script exists
+if [[ ! -f "$DEFAULT_WALL" ]]; then
+    echo "xwallpaper" >"$DEFAULT_WALL"
+    chmod +x "$DEFAULT_WALL"
+fi
+
+# Monitor information
+MONITORS=$(xrandr --listactivemonitors | grep "+")
+ACTIVE_MONITORS=($(awk '{print $4}' <<<"$MONITORS"))
+NUM_MONITORS=${#ACTIVE_MONITORS[@]}
+
+# Resolutions
+RESOLUTIONS=()
+for mon in "${ACTIVE_MONITORS[@]}"; do
+    res=$(grep "$mon" <<<"$MONITORS" | grep -Po "\d+(?=/)" | tr "\n" "x")
+    RESOLUTIONS+=("${res::-1}")
+done
+
+# Selection window center
+x="${RESOLUTIONS[0]%%x*}"
+y="${RESOLUTIONS[0]##*x}"
+xl=$(( (x-1000)/2 ))
+yl=$(( (y-750)/2 ))
+LOCATION="1000x750+$xl+$yl"
+
+# Flags
+WithPywal="False"
+ShowOptions="False"
+Randomly="False"
+OnlyBetterlockscreen="False"
+WithBetterlockscreen="False"
+UseFeh="False"
+UseRofi="False"
+
+startMessage="Apply wallpaper to lockscreen"
+finishMessage="Finished applying wallpaper to lockscreen"
+
+usage() {
+    cat <<EOF
+Wall-d: A simple and fast wallpaper manager for X
+
+Usage:
+  -h  Show help message
+  -d  path/to/wallpapers
+  -r  Restore last wallpaper
+  -p  Change colorscheme using pywal
+  -b  Also update Betterlockscreen wallpaper
+  -l  Only update Betterlockscreen wallpaper
+  -n  Random wallpaper(s)
+  -o  Show wallpaper fit options
+  -f  Use feh instead of xwallpaper
+  -R  Use rofi instead of dmenu
+EOF
+}
+
+restore() {
+    if [[ -f "$LAST_WALL" ]]; then
+        lastwall=$(<"$LAST_WALL")
+        ext="${lastwall##*.}"
+        if [[ "$ext" == "gif" ]]; then
+            xwinwrap -ov -ni -fs -- mpv --mute=yes --no-audio --no-osc \
+                --msg-level=all=no -wid WID --keepaspect=no --loop "$lastwall" &
+        elif [[ "$UseFeh" == "True" ]]; then
+            "$HOME/.fehbg" &
+        else
+            "$DEFAULT_WALL"
+        fi
+    else
+        "$DEFAULT_WALL"
+    fi
+}
+
+get_wall_option() {
+    local feh=$1 rofi=$2
+    local opts
+
+    if [[ "$feh" == "True" ]]; then
+        opts="fill\ncenter\ntile\nscale"
+    else
+        opts="zoom\ncenter\ntile\nstretch\nno-randr"
+    fi
+
+    if [[ "$ShowOptions" == "True" ]]; then
+        if [[ "$rofi" == "True" ]]; then
+            echo -e "$opts" | rofi -dmenu -l 5 -p Options
+        else
+            echo -e "$opts" | dmenu $COLOR_OPTIONS -l 5 -p Options
+        fi
+    else
+        [[ "$feh" == "True" ]] && echo "scale" || echo "stretch"
+    fi
+}
+
+get_virtual_resolution() {
+    local total_width=0
+    local max_height=0
+    for res in "${RESOLUTIONS[@]}"; do
+        local w=${res%%x*}
+        local h=${res##*x}
+        total_width=$((total_width + w))
+        ((h > max_height)) && max_height=$h
+    done
+    echo "${total_width}x${max_height}+0+0"
+}
+
+set_wallpaper() {
+    local options="$1"
+    shift
+    local walls=("$@")
+
+    killall -q xwinwrap || true
+    echo "${walls[-1]}" >"$LAST_WALL"
+
+    # Check if each monitor wallpaper is animated
+    local animated=0
+    for wall in "${walls[@]}"; do
+        ext="${wall##*.}"
+        if [[ "$ext" =~ ^(gif|mp4)$ ]]; then
+            animated=1
+            break
+        fi
+    done
+
+    # If any animated wallpaper → one xwinwrap per monitor that has animated image
+    if [[ $animated -eq 1 ]]; then
+        for i in "${!walls[@]}"; do
+            wall="${walls[i]}"
+            ext="${wall##*.}"
+            if [[ "$ext" =~ ^(gif|mp4)$ ]]; then
+                res="${RESOLUTIONS[i]}"
+                offset_x=0
+                offset_y=0
+                if [[ $i -gt 0 ]]; then
+                    # Calculate offset for monitor i based on resolutions of previous monitors
+                    for ((j=0; j<i; j++)); do
+                        offset_x=$((offset_x + ${RESOLUTIONS[j]%%x*}))
+                    done
+                fi
+                xwinwrap -g "${res}+${offset_x}+${offset_y}" -ov -ni -- mpv --mute=yes \
+                    --no-audio --no-osc --msg-level=all=no -wid WID --keepaspect=no --loop "$wall" &
+            fi
+        done
+    fi
+
+    # Apply wallpaper for still images
+    if [[ "$OnlyBetterlockscreen" == "True" ]]; then
+        betterlockscreen -u "${walls[-1]}" -r "${RESOLUTIONS[0]}"
+    elif [[ "$UseFeh" == "True" ]]; then
+        feh --bg-"$options" "${walls[@]}"
+    else
+        cmd="xwallpaper"
+        for i in "${!ACTIVE_MONITORS[@]}"; do
+            cmd+=" --output ${ACTIVE_MONITORS[i]} --$options ${walls[i]}"
+        done
+        eval "$cmd" && sed -i "s|xwallpaper.*|$cmd|" "$DEFAULT_WALL"
+    fi
+
+    [[ "$WithPywal" == "True" ]] && wal -i "${walls[-1]}" -nq -o "$HOME/.config/wal/postrun"
+
+    if [[ "$WithBetterlockscreen" == "True" ]]; then
+        dunstify "Wall-d" "$startMessage"
+        betterlockscreen -u "${walls[-1]}" -r "${RESOLUTIONS[0]}"
+        dunstify "Wall-d" "$finishMessage"
+    fi
+}
+
+choose_wallpapers() {
+    local count="$1"
+    local walls
+    if [[ "$Randomly" == "True" ]]; then
+        walls=$(find "$DIR" -type f \( -iname "*.jpg" -o -iname "*.jpeg" -o -iname "*.png" -o -iname "*.gif" -o -iname "*.mp4" \) | shuf -n "$count")
+    else
+        walls=$(nsxiv -a -t -o -b -g "$LOCATION" "$DIR" | xargs)
+    fi
+    echo "$walls"
+}
+
+Single() {
+    local walls=($(choose_wallpapers 1))
+    [[ -z "$walls" ]] && exit 0
+    local wall="${walls[0]}"
+    local ext="${wall##*.}"
+    local opt=$(get_wall_option "$UseFeh" "$UseRofi")
+
+    # Kill lingering winwrap instances
+    killall -q xwinwrap || true
+
+    # If animation → stretch over full virtual screen
+    if [[ "$ext" =~ ^(gif|mp4)$ ]]; then
+        local virtual_res=$(get_virtual_resolution)
+        xwinwrap -g "$virtual_res" -ov -ni -- mpv --mute=yes --no-audio --no-osc \
+            --msg-level=all=no -wid WID --keepaspect=no --loop "$wall" &
+        echo "$wall" >"$LAST_WALL"
+        return
+    fi
+
+    # Regular static wallpaper → single call covers all monitors
+    echo "$wall" >"$LAST_WALL"
+    if [[ "$UseFeh" == "True" ]]; then
+      feh --bg-"$opt" --no-xinerama "$wall"  # use chosen option
+    else
+      xwallpaper --"$opt" "$wall" && sed -i "s|xwallpaper.*|xwallpaper --$opt $wall|" "$DEFAULT_WALL"
+    fi
+
+    [[ "$WithPywal" == "True" ]] && wal -i "$wall" -nq -o "$HOME/.config/wal/postrun"
+    if [[ "$WithBetterlockscreen" == "True" ]]; then
+        dunstify "Wall-d" "$startMessage"
+        betterlockscreen -u "$wall" -r "${RESOLUTIONS[0]}"
+        dunstify "Wall-d" "$finishMessage"
+    fi
+}
+
+Multiple() {
+    local walls=($(choose_wallpapers "$NUM_MONITORS"))
+    [[ ${#walls[@]} -ne $NUM_MONITORS ]] && {
+        echo "Error: Must select exactly $NUM_MONITORS wallpapers."
+        exit 1
+    }
+    local opt=$(get_wall_option "$UseFeh" "$UseRofi")
+    set_wallpaper "$opt" "${walls[@]}"
+}
+
+while getopts :d:rhpbnolfR option; do
+    case "${option}" in
+        d) DIR=${OPTARG} ;;
+        r) restore; exit 0 ;;
+        p) WithPywal="True" ;;
+        o) ShowOptions="True" ;;
+        b) WithBetterlockscreen="True" ;;
+        l) OnlyBetterlockscreen="True" ;;
+        n) Randomly="True" ;;
+        h) usage; exit 0 ;;
+        f) UseFeh="True" ;;
+        R) UseRofi="True" ;;
+        *) usage; exit 0 ;;
+    esac
+done
+
+[[ -z "$DIR" ]] && usage && exit 0
+
+# Load colors if pywal is used
+if [[ "$WithPywal" == "True" ]]; then
+    source "$HOME/.cache/wal/colors.sh"
+    COLOR_OPTIONS="-nb $color0 -nf $color15 -sb $color1 -sf $color15"
+else
+    COLOR_OPTIONS=""
+fi
+
+# Mode selection menu
+if [[ "$UseRofi" == "True" ]]; then
+    MENU="rofi -dmenu -l 2 -p Mode?"
+else
+    MENU="dmenu $COLOR_OPTIONS -l 2 -p Mode?"
+fi
+
+MODE=$(echo -e "Single: One Wallpaper\nMultiple: $NUM_MONITORS Wallpapers" | $MENU)
+
+case "$MODE" in
+    Single*) Single ;;
+    Multiple*) Multiple ;;
+esac
