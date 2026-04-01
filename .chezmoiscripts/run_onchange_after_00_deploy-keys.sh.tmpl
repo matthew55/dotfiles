@@ -4,6 +4,8 @@
 # vim: filetype=bash
 
 # Secrets.kdbx hash: {{ include (joinPath .chezmoi.sourceDir "private_dot_local/share/secrets/encrypted_private_Secrets.kdbx.age") | sha256sum }}
+#
+{{ if .installSecrets -}}
 
 set -e
 
@@ -16,8 +18,10 @@ GPG_DATA_HOME="${XDG_DATA_HOME:-$HOME/.local/share}/gnupg"
 SSH_ENTRY="SSH/SSH Key Attachments"
 GPG_ENTRY="GPG/GPG Key Attachments"
 
-# Exit if the user chose no to setting up SSH keys earlier
-[ ! -f "$KEY_PATH" ] && exit 0
+if ! command -v keepassxc-cli &> /dev/null; then
+    echo "Error: keepassxc-cli not found. Skipping key import."
+    exit 0
+fi
 
 echo "Importing SSH and GPG keys from KeePassXC..."
 [ ! -d "$SSH_PATH" ] && mkdir -p "$SSH_PATH" && chmod 700 "$SSH_PATH"
@@ -65,3 +69,7 @@ echo "Done! SSH keys in $SSH_PATH and GPG keys imported to $GPG_DATA_HOME"
 echo "Setting git remote URL to SSH URL..."
 git remote set-url origin git@github.com:matthew55/dotfiles.git
 echo "Done!"
+
+{{- else -}}
+# User chose not to install secrets; skipping decryption.
+{{- end }}
