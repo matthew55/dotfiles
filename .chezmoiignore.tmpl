@@ -1,0 +1,9 @@
+# Ignore all encrypted files and dirs if installSecrets is false
+{{- if not .installSecrets }}
+**/*.age
+encrypted_*
+.local/share/secrets
+{{- end }}
+
+README.md
+key.txt

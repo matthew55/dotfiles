@@ -4,7 +4,7 @@
 # vim: filetype=bash
 
 # Secrets.kdbx hash: {{ include (joinPath .chezmoi.sourceDir "private_dot_local/share/secrets/encrypted_private_Secrets.kdbx.age") | sha256sum }}
-#
+
 {{ if .installSecrets -}}
 
 set -e
@@ -71,5 +71,5 @@ git remote set-url origin git@github.com:matthew55/dotfiles.git
 echo "Done!"
 
 {{- else -}}
-# User chose not to install secrets; skipping decryption.
+echo "User chose not to install secrets; skipping KeePassXC import..."
 {{- end }}

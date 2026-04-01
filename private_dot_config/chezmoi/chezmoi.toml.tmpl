@@ -1,8 +1,6 @@
 {{- $installSecrets := false -}}
-{{- if (hasKey . "installSecrets") -}}
-    {{- $installSecrets = .installSecrets -}}
-{{- else -}}
-    {{- $installSecrets = promptBool "Will you be installing custom secrets/SSH keys" -}}
+{{- if stdinIsATTY -}}
+{{-   $installSecrets = promptBoolOnce . "installSecrets" "Do you want to decrypt SSH keys/secrets" false -}}
 {{- end -}}
 
 [data]
@@ -11,6 +9,6 @@
 {{ if $installSecrets -}}
 encryption = "age"
 [age]
-    identity = ["{{ .chezmoi.homeDir }}/.local/share/secrets/key.txt"]
+    identity = {{ joinPath .chezmoi.homeDir ".local/share/secrets/key.txt" | quote }}
     recipient = "age17vcm8j4sl7fh3z0rrpjl95hymje0qccd08ehau4t9ef4382qg4yqjnm358"
 {{- end }}
