@@ -7,7 +7,7 @@
 
 {{- $installSecrets := .installSecrets | default false -}}
 
-{{ if .installSecrets -}}
+{{ if $installSecrets -}}
 
 set -e
 
