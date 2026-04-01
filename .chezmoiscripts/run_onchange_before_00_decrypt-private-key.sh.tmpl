@@ -7,10 +7,12 @@
 
 set -e
 
-{{- $installSecrets := .installSecrets | default false -}}
+{{- $installSecrets := false -}}
+{{- if hasKey . "installSecrets" -}}
+  {{- $installSecrets = .installSecrets -}}
+{{- end -}}
 
-{{ if $installSecrets -}}
-
+{{- if $installSecrets }}
 SECRETS_PATH="$HOME/.local/share/secrets"
 KEY_PATH="$SECRETS_PATH/key.txt"
 
