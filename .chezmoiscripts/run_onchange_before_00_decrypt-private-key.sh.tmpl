@@ -5,14 +5,14 @@
 
 # key.txt hash: {{ include (joinPath .chezmoi.sourceDir "private_dot_local/share/secrets/key.txt.age") | sha256sum }}
 
-set -e
-
 {{- $installSecrets := false -}}
 {{- if hasKey . "installSecrets" -}}
   {{- $installSecrets = .installSecrets -}}
 {{- end -}}
 
 {{- if $installSecrets }}
+set -e
+
 SECRETS_PATH="$HOME/.local/share/secrets"
 KEY_PATH="$SECRETS_PATH/key.txt"
 
