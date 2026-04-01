@@ -1,5 +1,10 @@
 # Ignore all encrypted files and dirs if installSecrets is false
-{{- if not .installSecrets }}
+{{- $installSecrets := false -}}
+{{- if hasKey . "installSecrets" -}}
+  {{- $installSecrets = .installSecrets -}}
+{{- end -}}
+
+{{- if not $installSecrets }}
 **/*.age
 encrypted_*
 .local/share/secrets
