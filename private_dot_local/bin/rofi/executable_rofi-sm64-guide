@@ -1,0 +1,195 @@
+#!/usr/bin/env bash
+# Script to make browsing the SM64 Ukikipedia RTA Guide extremely easy and Rofi integrated.
+# This is great for people looking to practice speedrunning the game on Linux (niche audience).
+
+set -e
+
+ROFI_CMD="rofi-run -dmenu -i -p"
+
+platforms=(
+  "Nintendo 64"
+  "Virtual Console"
+  "Emulator"
+)
+
+categories=(
+  "0/1 Star"
+  "16 Star"
+  "70 Star"
+  "120 Star"
+  "90 Star"
+  "50 Star"
+  "31 Star"
+  "15 Star"
+)
+
+general=(
+  "Movement Guide"
+  "Lakitu Skip"
+  "Lobby Backwards Long Jump"
+  "DDD skip"
+  "50 Star Door and Endless Staircase BLJs"
+  "MIPS Clip"
+)
+
+stages=(
+  "Bob-omb Battlefield"
+  "Whomp's Fortress"
+  "Jolly Roger Bay"
+  "Cool, Cool Mountain"
+  "Big Boo's Haunt"
+  "Hazy Maze Cave"
+  "Lethal Lava Land"
+  "Shifting Sand Land"
+  "Dire, Dire Docks"
+  "Snowman's Land"
+  "Wet-Dry World"
+  "Tall, Tall Mountain"
+  "Tiny-Huge Island"
+  "Tick Tock Clock"
+  "Rainbow Ride"
+  "Castle Secret Stars"
+)
+
+get_stars() {
+  case "$1" in
+    "Bob-omb Battlefield")
+      echo -e "<-- Back\nStage Info\nBig Bob-omb on the Summit\nFootrace with Koopa the Quick\nShoot to the Island in the Sky\nFind the 8 Red Coins\nMario Wings to the Sky\nBehind Chain Chomp's Gate\nBoB 100 Coins"
+      ;;
+    "Whomp's Fortress")
+      echo -e "<-- Back\nStage Info\nChip off Whomp's Block\nTo the Top of the Fortress\nShoot into the Wild Blue\nRed Coins on the Floating Isle\nFall onto the Caged Island\nBlast Away the Wall\nWF 100 Coins"
+      ;;
+    "Jolly Roger Bay")
+      echo -e "<-- Back\nStage Info\nPlunder in the Sunken Ship\nCan the Eel Come Out to Play?\nTreasure of the Ocean Cave\nRed Coins on the Ship Afloat\nBlast to the Stone Pillar\nThrough the Jet Stream\n JRB 100 Coins"
+      ;;
+    "Cool, Cool Mountain")
+      echo -e "<-- Back\nStage Info\nSlip Slidin' Away\nLi'l Penguin Lost\nBig Penguin Race\nFrosty Slide for 8 Red Coins\nSnowman's Lost His Head\nWall Kicks Will Work\nCCM 100 Coins"
+      ;;
+    "Big Boo's Haunt")
+      echo -e "<-- Back\nStage Info\nGo on a Ghost Hunt\nRide Big Boo's Merry-Go-Round\nSecret of the Haunted Books\nSeek the 8 Red Coins\nBig Boo's Balcony\nEye to Eye in the Secret Room\nBBH 100 Coins"
+      ;;
+    "Hazy Maze Cave")
+      echo -e "<-- Back\nStage Info\nSwimming Beast in the Cavern\nElevate for 8 Red Coins\nMetal-Head Mario Can Move!\nNavigating the Toxic Maze\nA-Maze-ing Emergency Exit\nWatch for Rolling Rocks\nHMC 100 Coins"
+      ;;
+    "Lethal Lava Land")
+      echo -e "<-- Back\nStage Info\nBoil the Big Bully\nBully the Bullies\n8-Coin Puzzle with 15 Pieces\nRed-Hot Log Rolling\nHot-Foot-It into the Volcano\nElevator Tour in the Volcano\nLLL 100 Coins"
+      ;;
+    "Shifting Sand Land")
+      echo -e "<-- Back\nStage Info\nIn the Talons of the Big Bird\nShining Atop the Pyramid\nInside the Ancient Pyramid\nStand Tall on the Four Pillars\nFree Flying for 8 Red Coins\nPyramid Puzzle\nSSL 100 Coins"
+      ;;
+    "Dire, Dire Docks")
+      echo -e "<-- Back\nStage Info\nBoard Bowser's Sub\nChests in the Current\nPole-Jumping for Red Coins\nThrough the Jet Stream\nThe Manta Ray's Reward\nCollect the Caps...\nDDD 100 Coins"
+      ;;
+    "Snowman's Land")
+      echo -e "<-- Back\nStage Info\nSnowman's Big Head\nChill with the Bully\nIn the Deep Freeze\nWhirl from the Freezing Pond\nShell Shreddin' for Red Coins\nInto the Igloo\nSL 100 Coins"
+      ;;
+    "Wet-Dry World")
+      echo -e "<-- Back\nStage Info\nShocking Arrow Lifts!\nTop o' the Town\nSecrets in the Shallows & Sky\nExpress Elevator--Hurry Up!\nGo to Town for Red Coins\nQuick Race Through Downtown!\nWDW 100 Coins + Secrets in the Shallows & Sky\nWDW 100 Coins + Go to Town for Red Coins"
+      ;;
+    "Tall, Tall Mountain")
+      echo -e "<-- Back\nStage Info\nScale the Mountain\nScale the Mountain\nMystery of the Monkey Cage\nScary 'Shrooms, Red Coins\nMysterious Mountainside\nBreathtaking View from Bridge\nBlast to the Lonely Mushroom\nTTM 100 Coins"
+      ;;
+    "Tiny-Huge Island")
+      echo -e "<-- Back\nStage Info\nPluck the Piranha Flower\nThe Tip Top of the Huge Island\nRematch with Koopa the Quick\nFive Itty Bitty Secrets\nWiggler's Red Coins\nMake Wiggler Squirm\nTHI 100 Coins"
+      ;;
+    "Tick Tock Clock")
+      echo -e "<-- Back\nStage Info\nRoll into the Cage\nThe Pit and the Pendulums\nGet a Hand\nStomp on the Thwomp\nTimed Jumps on Moving Bars\nStop Time for Red Coins\nTTC 100 Coins"
+      ;;
+    "Rainbow Ride")
+      echo -e "<-- Back\nStage Info\nCruiser Crossing the Rainbow\nThe Big House in the Sky\nCoins Amassed in a Maze\nSwingin' in the Breeze\nTricky Triangles!\nSomewhere Over the Rainbow\nRR 100 Coins"
+      ;;
+    "Castle Secret Stars")
+      echo -e "<-- Back\nStage Info\nBowser in the Dark World\nBowser in the Fire Sea\nBowser in the Sky\nBowser Battles\nTower of the Wing Cap\nVanish Cap Under the Moat\nCavern of the Metal Cap\nThe Princess's Secret Slide\nThe Secret Aquarium\nWing Mario Over the Rainbow\nHMC Toad\nUpstairs Toad\nTippy Toad\nMIPS"
+      ;;
+  esac
+}
+
+get_short_stage_name() {
+  case "$1" in
+    "Bob-omb Battlefield") echo "BOB" ;;
+    "Whomp's Fortress") echo "WF" ;;
+    "Jolly Roger Bay") echo "JRB" ;;
+    "Cool, Cool Mountain") echo "CCM" ;;
+    "Big Boo's Haunt") echo "BBH" ;;
+    "Hazy Maze Cave") echo "HMC" ;;
+    "Lethal Lava Land") echo "LLL" ;;
+    "Shifting Sand Land") echo "SSL" ;;
+    "Dire, Dire Docks") echo "DDD" ;;
+    "Snowman's Land") echo "SL" ;;
+    "Wet-Dry World") echo "WDW" ;;
+    "Tall, Tall Mountain") echo "TTM" ;;
+    "Tiny-Huge Island") echo "THI" ;;
+    "Tick Tock Clock") echo "TTC" ;;
+    "Rainbow Ride") echo "RR" ;;
+    "Castle Secret Stars") echo "Castle Secret Stars" ;;
+  esac
+}
+
+main_menu() {
+  printf "Platforms\nCategories\nGeneral Gameplay\nSingle Stars" | $ROFI_CMD "Main Menu"
+}
+
+open_url() {
+  base_url="https://ukikipedia.net/wiki/RTA_Guide"
+  xdg-open "$base_url/${1// /_}"
+  exit 0
+}
+
+while true; do
+  choice=$(main_menu)
+
+  case "$choice" in
+    "Platforms")
+      selected=$(printf "<-- Back\n%s" "$(printf "%s\n" "${platforms[@]}")" | $ROFI_CMD "Platforms")
+      if [[ "$selected" == "<-- Back" ]]; then continue; fi
+      [ -n "$selected" ] && open_url "$selected"
+      ;;
+
+    "Categories")
+      selected=$(printf "<-- Back\n%s" "$(printf "%s\n" "${categories[@]}")" | $ROFI_CMD "Categories")
+      if [[ "$selected" == "<-- Back" ]]; then continue; fi
+      [ -n "$selected" ] && open_url "$selected"
+      ;;
+
+    "General Gameplay")
+      selected=$(printf "<-- Back\n%s" "$(printf "%s\n" "${general[@]}")" | $ROFI_CMD "Gameplay")
+      if [[ "$selected" == "<-- Back" ]]; then continue; fi
+      [ -n "$selected" ] && open_url "$selected"
+      ;;
+
+    "Single Stars")
+      while true; do
+        stage_list="<-- Back\n"
+        for s in "${stages[@]}"; do
+          short=$(get_short_stage_name "$s")
+          if [ "$s" == "$short" ]; then
+              stage_list+="$s\n"
+          else
+              stage_list+="$s ($short)\n"
+          fi
+        done
+
+        selected_line=$(echo -e "$stage_list" | sed '/^$/d' | $ROFI_CMD "Stages")
+        
+        if [[ -z "$selected_line" || "$selected_line" == "<-- Back" ]]; then break; fi
+
+        stage=$(echo "$selected_line" | sed 's/ (.*)//')
+        stars=$(get_stars "$stage")
+        star=$(printf "%s\n" "$stars" | $ROFI_CMD "$stage")
+
+        if [[ -n "$star" && "$star" != "<-- Back" ]]; then
+          if [ "$star" == "Stage Info" ]; then
+            short_name=$(get_short_stage_name "$stage")
+            open_url "$short_name"
+          else
+            open_url "$star"
+          fi 
+        fi
+      done
+      ;;
+
+    *)
+      exit 0
+      ;;
+  esac
+done
