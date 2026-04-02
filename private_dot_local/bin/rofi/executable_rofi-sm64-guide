@@ -126,12 +126,12 @@ get_short_stage_name() {
 }
 
 main_menu() {
-  printf "Platforms\nCategories\nGeneral Gameplay\nSingle Stars" | $ROFI_CMD "Main Menu"
+  printf "Home\nPlatforms\nCategories\nGeneral Gameplay\nSingle Stars" | $ROFI_CMD "Main Menu"
 }
 
 open_url() {
-  base_url="https://ukikipedia.net/wiki/RTA_Guide"
-  xdg-open "$base_url/${1// /_}"
+  local base_url="https://ukikipedia.net/wiki/RTA_Guide"
+  xdg-open "${base_url}${1:+/${1// /_}}"
   exit 0
 }
 
@@ -139,6 +139,9 @@ while true; do
   choice=$(main_menu)
 
   case "$choice" in
+    "Home")
+      open_url
+      ;;
     "Platforms")
       selected=$(printf "<-- Back\n%s" "$(printf "%s\n" "${platforms[@]}")" | $ROFI_CMD "Platforms")
       if [[ "$selected" == "<-- Back" ]]; then continue; fi
