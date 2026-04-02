@@ -49,6 +49,3 @@ else
 fi
 
 echo "Syncthing finished setting up. You can access the Web GUI at: http://127.0.0.1:8384"
-
-# For timeshift
-xhost +SI:localuser:root

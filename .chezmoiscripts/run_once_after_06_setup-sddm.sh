@@ -17,5 +17,5 @@ echo -e "[General]\nNumlock=on" | sudo tee /etc/sddm.conf.d/numlock.conf > /dev/
 echo "Numlock setup on startup."
 
 echo "Starting SDDM service..."
-sudo systemctl enable sddm.service --now
+sudo systemctl enable sddm.service
 echo "SDDM service started."

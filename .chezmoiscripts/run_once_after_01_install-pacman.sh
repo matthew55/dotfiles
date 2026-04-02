@@ -22,6 +22,7 @@ echo "Pacman is now colorful and hungry."
 
 echo "Installing packages from pacman..."
 sudo pacman -S --needed --noconfirm \
+	pacman-contrib \
 	xdg-user-dirs \
 	thunar \
 	wtype \

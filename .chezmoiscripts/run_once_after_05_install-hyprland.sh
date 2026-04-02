@@ -19,10 +19,9 @@ sudo pacman -S --needed --noconfirm \
 	cmake \
 	cpio \
 	git \
-	g++ \
 	gcc \
 	pkg-config \
-	jq \ 
+	jq \
 	meson \
 	pacman-contrib \
 	gsettings-desktop-schemas \
@@ -31,7 +30,7 @@ sudo pacman -S --needed --noconfirm \
 	xdg-desktop-portal-gtk \
 	polkit-kde-agent \
 	network-manager-applet \
-	nwg-displays:waybar
+	nwg-displays \
 	handlr-regex \
 	ttf-dejavu \
 	ttf-liberation \
@@ -43,11 +42,25 @@ sudo pacman -S --needed --noconfirm \
 	ttf-ibm-plex \
 	ttf-nerd-fonts-symbols 
 
-echo "Installing hyprpm plugins..."
-# Ask for the administrator password upfront so we can use the yes command
+echo "==================================================="
+echo "           Installing hyprpm plugins..."
+echo "     (This will launch hyprland for a second)"
+echo "(Don't touch anything, it will close automatically)"
+echo "==================================================="
+# Ask for the administrator password upfront and keep alive until no longer needed
 sudo -v
-# Keep-alive: update existing sudo time stamp until the script has finished
-while true; do sudo -n true; sleep 60; kill -0 "$$" || exit; done 2>/dev/null &
+while true; do 
+    sudo -n v; 
+    sleep 60; 
+    kill -0 "$$" || exit; 
+done 2>/dev/null &
+SUDO_LOOP_PID=$!
+
+# Hyprland must unfortunately be running to install plugins, and there is no headless mode yet.
+# This is a shit solution and maybe one day this will be able to be properly implemented.
+start-hyprland >/dev/null 2>&1 &
+HYPR_PID=$!
+sleep 2
 
 hyprpm update
 yes | hyprpm add https://github.com/hyprwm/hyprland-plugins
@@ -58,8 +71,12 @@ hyprpm enable csgo-vulkan-fix
 hyprpm enable split-monitor-workspaces
 hyprpm enable hyprglass
 hyprpm enable hyprtasking
-# Reload Hyprland to apply plugin changes
+
 hyprctl reload
+
+kill $HYPR_PID
+kill $SUDO_LOOP_PID
+
 echo "Done! Hyprpm plugins installed."
 echo ""
 echo "To start Hyprland manually run:"

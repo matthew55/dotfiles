@@ -2,7 +2,7 @@
 # Setup TLDR
 
 echo "Installing and setting up tealdeer..."
-sudo pacman -S --needed tealdeer
+sudo pacman -S --needed --noconfirm tealdeer
 
 # tealdeer requires an initial manual update to populate the cache
 tldr --update
