@@ -1,6 +1,6 @@
 {{- $installSecrets := false -}}
 {{- if stdinIsATTY -}}
-{{-   $installSecrets = promptBoolOnce . "installSecrets" "Do you want to decrypt SSH keys/secrets" false -}}
+{{-   $installSecrets = promptBoolOnce . "installSecrets" "Do you want to decrypt SSH keys/secrets (y/n) ?" -}}
 {{- end -}}
 
 [data]
